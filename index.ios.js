@@ -3,48 +3,27 @@
  * https://github.com/facebook/react-native
  */
 'use strict';
-var WebsiteView = require('./components/WebsiteView');
-import React, {
-    NavigatorIOS,
-    AppRegistry,
-    Component,
-    StyleSheet,
-    Text,
-    View,
-    Image
-}
-from 'react-native';
+var React = require('react-native');
+// var Navigation = require('./components/Navigation');
+var ComponentList = require('./ComponentList');
+// var CameraImage = require('./components/CameraImage');
 
-var NV = React.createClass({
-    render: function () {
-        return (
-            <NavigatorIOS
-              style={styles.container}
-              initialRoute={{
-                title: '易地接',
-                component: WebsiteView
-              }} />
-            
-            )
-    }
+var {
+    AppRegistry,
+    NavigatorIOS
+} = React;
+
+var Hello = React.createClass({
+
+  render: function() {
+    return (
+      <NavigatorIOS style={{flex: 1}} initialRoute={{
+          component: ComponentList,
+          title: '组件列表',
+          passProps: {}
+        }}/>
+    );
+  }
 })
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        // justifyContent: 'center',
-        // alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-    },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
-    },
-    img: {
-        width: 50,
-        height: 50
-    },
-});
-
-AppRegistry.registerComponent('Hello', () => NV);
+AppRegistry.registerComponent('Hello', () => Hello);

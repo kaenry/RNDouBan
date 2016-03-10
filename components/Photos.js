@@ -21,13 +21,23 @@ var Photos = React.createClass({
   render: function() {
   	var photos = this.state.photos || [];
   	var photoViews = [];
+    photos.forEach((p) => {
+      photoViews.push(
+  				<View style={styles.imgView}>
+  					<Image
+  					  style={styles.img}
+  					  source={{uri: p}} />
+
+  				</View>
+  			)
+    })
   	for (var i in photos) {
   		photoViews.push(
   				<View style={styles.imgView}>
   					<Image
   					  style={styles.img}
   					  source={{uri: photos[i]}} />
-  					
+
   				</View>
   			)
   	}
@@ -48,7 +58,7 @@ var Photos = React.createClass({
 
   componentWillMount: function() {
     var _that = this;
-    CameraRoll.getPhotos(fetchParams, function(data) {
+    CameraRoll.getPhotos(fetchParams).then(function(data) {
     	var edges = data.edges;
     	var photos = [];
     	for (var i in edges) {
