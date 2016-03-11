@@ -25,7 +25,7 @@ var CameraImage = React.createClass({
 
   saveImage: function (img) {
   	var _that = this;
-  	CameraRoll.saveImageWithTag('http://img.hb.aicdn.com/78ae0559d0dd5e0617afa3a911599462310248674a848-D4DvFT_fw658', function(data){alert(data)}, function (error) {alert(error)})
+  	CameraRoll.saveImageWithTag('http://img.hb.aicdn.com/78ae0559d0dd5e0617afa3a911599462310248674a848-D4DvFT_fw658').then(function(data){alert(data)}, function (error) {alert(error)})
   }
 });
 

@@ -4,7 +4,8 @@ var {
   StyleSheet,
   View,
   ListView,
-  Text
+  Text,
+  TouchableHighlight
 } = React;
 var ComponentList = React.createClass({
   getInitialState: function() {
@@ -41,14 +42,17 @@ var ComponentList = React.createClass({
   },
   _renderRow: function(rowData) {
     return (
-        <View style={styles.listItem}>
-          <Text style={styles.item} onPress={this._pressRow.bind(this, rowData)}>
-            {rowData.title}
-          </Text>
-          <Text style={styles.info}>
-            {rowData.info}
-          </Text>
-        </View>
+        <TouchableHighlight underlayColor={'#6ee340'} style={styles.listItem} onPress={this._pressRow.bind(this, rowData)}>
+          <View>
+            <Text style={styles.item} >
+              {rowData.title}
+            </Text>
+            <Text style={styles.info}>
+              {rowData.info}
+            </Text>
+          </View>
+
+        </TouchableHighlight>
     )
   },
   _pressRow: function(rowData) {

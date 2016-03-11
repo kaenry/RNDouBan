@@ -58,6 +58,7 @@ var Photos = React.createClass({
 
   componentWillMount: function() {
     var _that = this;
+    
     CameraRoll.getPhotos(fetchParams).then(function(data) {
     	var edges = data.edges;
     	var photos = [];
