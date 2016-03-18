@@ -13,11 +13,11 @@ var {
 var List = React.createClass({
   render: function() {
     return (
-      <ScrollView>
-        <Text onPress={this.goTo}>航天局宣布“三体”获奖</Text>
-        <Text onPress={this.goTo}>易地接正式成立</Text>
-        <Text onPress={this.goTo}>咕啾网上线</Text>
-        <Text onPress={this.goTo}>股市大跌，跌幅32.8%</Text>
+      <ScrollView style={styles.contentContainer}>
+        <Text style={styles.listItem} onPress={this.goTo}>航天局宣布“三体”获奖...</Text>
+        <Text style={styles.listItem} onPress={this.goTo}>易地接正式成立...</Text>
+        <Text style={styles.listItem} onPress={this.goTo}>咕啾网上线...</Text>
+        <Text style={styles.listItem} onPress={this.goTo}>股市大跌，跌幅32.8%...</Text>
       </ScrollView>
     );
   },
@@ -31,11 +31,13 @@ var List = React.createClass({
 
 var styles = StyleSheet.create({
 	contentContainer: {
+    // flex: 4,
+    // alignItems: 'center',
 		paddingTop: 5
 	},
 
-	scrollView: {
-
+	listItem: {
+    padding: 10
 	}
 });
 
