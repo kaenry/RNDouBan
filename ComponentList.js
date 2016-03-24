@@ -37,13 +37,13 @@ var ComponentList = React.createClass({
   render: function() {
 
     return (
-        <ListView style={styles.container} dataSource={this.state.dataSource} renderRow={this._renderRow}/>
+        <ListView contentContainerStyle={styles.wrapper} style={styles.container} dataSource={this.state.dataSource} renderRow={this._renderRow}/>
     );
   },
   _renderRow: function(rowData) {
     return (
-        <TouchableHighlight underlayColor={'#6ee340'} style={styles.listItem} onPress={this._pressRow.bind(this, rowData)}>
-          <View>
+        <TouchableHighlight underlayColor={'#6ee340'} style={styles.button} onPress={this._pressRow.bind(this, rowData)}>
+          <View style={styles.item}>
             <Text style={styles.item} >
               {rowData.title}
             </Text>
@@ -51,7 +51,6 @@ var ComponentList = React.createClass({
               {rowData.info}
             </Text>
           </View>
-
         </TouchableHighlight>
     )
   },
@@ -66,22 +65,26 @@ var ComponentList = React.createClass({
 });
 
 const styles = StyleSheet.create({
-
-  listItem: {
-    padding: 10,
-    marginBottom: 5,
-    flex: 1,
+  wrapper: {
+    paddingTop: 60,
+    paddingBottom: 20,
     alignItems: 'center',
-    backgroundColor: '#00c0ef'
   },
-
+  button: {
+      width: 200,
+      height: 40,
+      marginBottom: 10,
+      borderRadius: 6,
+      backgroundColor: '#f38',
+      alignItems: 'center',
+      justifyContent: 'center',
+  },
   item: {
-    fontSize: 16
+    alignItems: 'center'
   },
-
   info: {
-    fontSize: 14,
-    color: '#eee'
+    fontSize: 12,
+    color: '#fff'
   }
 });
 
