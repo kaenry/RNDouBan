@@ -69,7 +69,7 @@ var Photos = React.createClass({
     		photos: photos
     	})
     });
-  },
+  }
 });
 
 

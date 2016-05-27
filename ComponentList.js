@@ -1,46 +1,56 @@
-var React = require('react-native');
+'use strict';
 
-var {
+import CameraImage from './components/CameraImage';
+import WebsiteView from './components/WebsiteView';
+import Photos from './components/Photos';
+
+import React, {
+    Component,
+    PropTypes,
+} from 'react';
+
+import {
   StyleSheet,
   View,
   ListView,
   Text,
   TouchableHighlight
-} = React;
-var ComponentList = React.createClass({
-  getInitialState: function() {
+} from 'react-native';
+export default class ComponentList extends React.Component {
+  constructor(props) {
+    super(props);
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     var list = [
       {
         name: 'CameraImage',
         title: 'CameraImage',
         info: '获取相册，保存图片',
-        module: require('./components/CameraImage')
+        module: CameraImage
       },
       {
         name: 'WebsiteView',
         title: 'WebsiteView',
         info: 'WebView',
-        module: require('./components/WebsiteView')
+        module: WebsiteView
       },
       {
         name: 'Photos',
         title: 'Photos',
         info: '相册',
-        module: require('./components/Photos')
+        module: Photos
       }
     ];
-    return {
+    this.state = {
       dataSource: ds.cloneWithRows(list)
     };
-  },
-  render: function() {
+  }
+  render() {
 
     return (
-        <ListView contentContainerStyle={styles.wrapper} style={styles.container} dataSource={this.state.dataSource} renderRow={this._renderRow}/>
+        <ListView contentContainerStyle={styles.wrapper} style={styles.container} dataSource={this.state.dataSource} renderRow={this._renderRow.bind(this)}/>
     );
-  },
-  _renderRow: function(rowData) {
+  }
+  _renderRow(rowData) {
     return (
         <TouchableHighlight underlayColor={'#6ee340'} style={styles.button} onPress={this._pressRow.bind(this, rowData)}>
           <View style={styles.item}>
@@ -53,16 +63,17 @@ var ComponentList = React.createClass({
           </View>
         </TouchableHighlight>
     )
-  },
-  _pressRow: function(rowData) {
+  }
+  _pressRow(rowData) {
     this.props.navigator.push({
-      component: rowData.module,
-      title: rowData.title,
-      rightButtonTitle: '返回'
+      // component: rowData.module,
+      name: rowData.title,
+      // id: rowData.name,
+      component: rowData.module
     });
   }
 
-});
+};
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -87,5 +98,3 @@ const styles = StyleSheet.create({
     color: '#fff'
   }
 });
-
-module.exports = ComponentList;

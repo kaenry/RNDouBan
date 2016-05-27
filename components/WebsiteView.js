@@ -1,27 +1,30 @@
-/* @flow */
 'use strict';
 
-var React = require('react-native');
-var Dimensions = require('Dimensions');
+import Dimensions from 'Dimensions';
 
 var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
 
-var {
+import React, {
+    Component,
+    PropTypes,
+} from 'react';
+
+import {
   StyleSheet,
   WebView,
   View,
-} = React;
+} from 'react-native';
 
-var WebsiteView = React.createClass({
-  render: function() {
+export default class WebsiteView extends React.Component {
+  render() {
     return (
       <View>
-      	<WebView style={styles.webview} source={{uri: 'http://www.yidijie.com/'}} automaticallyAdjustContentInsets={false}></WebView>
+      	<WebView style={styles.webview} source={{uri: 'http://goojio.com/'}} automaticallyAdjustContentInsets={false}></WebView>
       </View>
     );
   }
-});
+};
 
 
 var styles = StyleSheet.create({
@@ -31,6 +34,3 @@ var styles = StyleSheet.create({
 		backgroundColor: '#92D778'
 	}
 });
-
-
-module.exports = WebsiteView;
