@@ -1,13 +1,12 @@
 'use strict';
+import React, {
+    Component,
+    PropTypes
+} from 'react';
 
 import CameraImage from './components/CameraImage';
 import WebsiteView from './components/WebsiteView';
 import Photos from './components/Photos';
-
-import React, {
-    Component,
-    PropTypes,
-} from 'react';
 
 import {
   StyleSheet,
@@ -16,6 +15,7 @@ import {
   Text,
   TouchableHighlight
 } from 'react-native';
+
 export default class ComponentList extends React.Component {
   constructor(props) {
     super(props);

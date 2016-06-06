@@ -1,38 +1,31 @@
 /* @flow */
 'use strict';
 
-var React = require('react-native');
-var Detail = require('./Detail');
+import React,{
+  Component
+} from 'react';
 
-var {
+import {
   StyleSheet,
   ScrollView,
   Text
-} = React;
+} from 'react-native';
 
-var List = React.createClass({
-  render: function() {
+export default class List extends React.Component{
+  render() {
     return (
       <ScrollView style={styles.contentContainer}>
-        <Text style={styles.listItem} onPress={this.goTo}>航天局宣布“三体”获奖...</Text>
-        <Text style={styles.listItem} onPress={this.goTo}>易地接正式成立...</Text>
-        <Text style={styles.listItem} onPress={this.goTo}>咕啾网上线...</Text>
-        <Text style={styles.listItem} onPress={this.goTo}>股市大跌，跌幅32.8%...</Text>
+        <Text style={styles.listItem}>航天局宣布“三体”获奖...</Text>
+        <Text style={styles.listItem}>易地接正式成立...</Text>
+        <Text style={styles.listItem}>咕啾网上线...</Text>
+        <Text style={styles.listItem}>股市大跌，跌幅32.8%...</Text>
       </ScrollView>
     );
-  },
-  goTo: function () {
-  	this.props.navigator.push({
-  		component: Detail,
-  		title: '详情'
-  	})
   }
-});
+};
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
 	contentContainer: {
-    // flex: 4,
-    // alignItems: 'center',
 		paddingTop: 5
 	},
 
@@ -40,6 +33,3 @@ var styles = StyleSheet.create({
     padding: 10
 	}
 });
-
-
-module.exports = List;

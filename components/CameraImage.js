@@ -1,19 +1,21 @@
 /* @flow */
 'use strict';
 
-var React = require('react-native');
+import React,{
+  Component
+} from 'react';
 
-var {
+import {
   StyleSheet,
   CameraRoll,
   View,
   Image,
   Text
-} = React;
+} from 'react-native';
 
 
-var CameraImage = React.createClass({
-  render: function() {
+export default class CameraImage extends React.Component{
+  render() {
     return (
     	<View style={styles.container}>
 			<Image resizeMode='contain' style={styles.img} source={{uri: 'http://img.hb.aicdn.com/78ae0559d0dd5e0617afa3a911599462310248674a848-D4DvFT_fw658'}}>
@@ -21,16 +23,16 @@ var CameraImage = React.createClass({
       		<Text style={styles.font} onPress={this.saveImage}>保存</Text>
     	</View>
     );
-  },
+  }
 
-  saveImage: function (img) {
+  saveImage (img) {
   	var _that = this;
   	CameraRoll.saveImageWithTag('http://img.hb.aicdn.com/78ae0559d0dd5e0617afa3a911599462310248674a848-D4DvFT_fw658').then(function(data){alert(data)}, function (error) {alert(error)})
   }
-});
+};
 
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		alignItems: 'center'
@@ -46,6 +48,3 @@ var styles = StyleSheet.create({
 		padding: 10
 	}
 });
-
-
-module.exports = CameraImage;

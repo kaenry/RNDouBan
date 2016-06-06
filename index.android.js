@@ -1,35 +1,10 @@
 'use strict';
 
-import ComponentList from './ComponentList';
-import NavBar from './components/NavBar';
-
-import React, {
-    Component,
-    PropTypes,
-} from 'react';
-
+import React from 'react';
 import {
-    AppRegistry,
-    Navigator
+  AppRegistry,
 } from 'react-native';
 
-class Hello extends React.Component {
+import App from './App';
 
-  render() {
-    return (
-      <Navigator style={{flex: 1}} initialRoute={{
-          name: '组件列表',
-          component: ComponentList
-        }}
-        renderScene={(route, navigator) => {
-            let Component = route.component;
-            return <Component name={route.name} {...route.params} navigator={navigator} />
-          }
-        }
-        navigationBar={NavBar}
-      />
-    );
-  }
-};
-
-AppRegistry.registerComponent('Hello', () => Hello);
+AppRegistry.registerComponent('react_native_learning', () => App);

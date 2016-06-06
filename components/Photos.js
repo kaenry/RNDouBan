@@ -1,15 +1,18 @@
 /* @flow */
 'use strict';
 
-var React = require('react-native');
+import React, {
+    Component,
+    PropTypes,
+} from 'react';
 
-var {
+import {
   StyleSheet,
   ScrollView,
   View,
   CameraRoll,
   Image
-} = React;
+} from 'react-native';
 
 var fetchParams = {
 	first: 5,
@@ -17,8 +20,8 @@ var fetchParams = {
 	assetType: 'Photos'
 };
 
-var Photos = React.createClass({
-  render: function() {
+export default class Photos extends React.Component {
+  render() {
   	var photos = this.state.photos || [];
   	var photoViews = [];
     photos.forEach((p) => {
@@ -49,16 +52,16 @@ var Photos = React.createClass({
         </View>
       </ScrollView>
     );
-  },
-  getInitialState: function() {
+  }
+  getInitialState() {
     return {
       photos: null,
     };
-  },
+  }
 
-  componentWillMount: function() {
+  componentWillMount() {
     var _that = this;
-    
+
     CameraRoll.getPhotos(fetchParams).then(function(data) {
     	var edges = data.edges;
     	var photos = [];
@@ -70,7 +73,7 @@ var Photos = React.createClass({
     	})
     });
   }
-});
+};
 
 
 var styles = StyleSheet.create({
@@ -94,6 +97,3 @@ var styles = StyleSheet.create({
 		height: 120
 	}
 });
-
-
-module.exports = Photos;
