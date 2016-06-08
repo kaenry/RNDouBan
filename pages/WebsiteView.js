@@ -26,7 +26,6 @@ export default class WebsiteView extends React.Component {
   }
 };
 
-
 var styles = StyleSheet.create({
 	webview: {
 		width: width,

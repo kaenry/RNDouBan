@@ -5,6 +5,6 @@ import {
   AppRegistry,
 } from 'react-native';
 
-import App from './App';
+import app from './app';
 
-AppRegistry.registerComponent('react_native_learning', () => App);
+AppRegistry.registerComponent('react_native_learning', () => app);
