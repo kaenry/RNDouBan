@@ -13,9 +13,9 @@ import ListContainer from './ListContainer';
 import AddQuestContainer from './AddQuestContainer';
 
 const tabBarItems = [
-    {name:'index', title: '首页', icon: 'ios-home', component: ListContainer},
-    {name:'add', title: '发布任务', icon: 'ios-add', component: AddQuestContainer},
-    {name:'my', title: '我的', icon: 'ios-person', component: ProfileContainer},
+    {name:'index', title: '首页', icon: 'md-home', component: ListContainer},
+    {name:'add', title: '发布任务', icon: 'md-add', component: AddQuestContainer},
+    {name:'my', title: '我的', icon: 'md-person', component: ProfileContainer},
 ]
 
 export default class TabView extends React.Component {
