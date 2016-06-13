@@ -17,6 +17,7 @@ import {
 
 import {fetchList} from '../actions/listActions'
 import Card from '../components/Card'
+import CardDetail from './CardDetail'
 import Loading from '../components/Loading'
 
 let isLoading = true;
@@ -66,8 +67,20 @@ export default class Main extends React.Component{
 
   _renderRow(data){
     return (
-        <Card {...data}></Card>
+        <Card onPress={this._pressRow.bind(this, data)} {...data}></Card>
     )
+  }
+
+  _pressRow(data){
+    InteractionManager.runAfterInteractions(() => {
+        this.props.navigator.push({
+          name: 'CardDetail',
+          component: CardDetail,
+          passProps: {
+            card: data
+          }
+        })
+    });
   }
 };
 

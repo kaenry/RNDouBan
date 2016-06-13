@@ -8,7 +8,6 @@ export let fetchList = (isLoading)=>{
         dispatch(fetchingList(isLoading));
 
         return Util.get(URL, (response) => {
-          console.log(response);
             dispatch(receiveList(response.contents));
         }, (error) => {
             console.log('Fetch list error: ' + error);

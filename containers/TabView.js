@@ -36,6 +36,7 @@ export default class TabView extends React.Component {
                 key={i}
                 selected={this.state.selectedTab === page.name}
                 renderIcon={() => <Icon name={page.icon} style={styles.itemStyle}/>}
+                renderSelectedIcon={() => <Icon name={page.icon} style={styles.itemSelected}/>}
                 title={page.title}
                 onPress={() => this.setState({ selectedTab: page.name })}>
 
@@ -53,6 +54,11 @@ const styles = StyleSheet.create({
     itemStyle: {
       fontSize: 18,
       color: '#888',
+      alignItems: 'center',
+    },
+    itemSelected: {
+      fontSize: 18,
+      color: 'rgb(0, 122, 255)',
       alignItems: 'center',
     }
 })

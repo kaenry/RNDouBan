@@ -5,7 +5,8 @@ import React, {
 import {
   View,
   Text,
-  StyleSheet
+  StyleSheet,
+  TouchableOpacity
 } from 'react-native';
 
 import Constants from '../common/Constants'
@@ -27,17 +28,19 @@ export default class Card extends React.Component {
 
   render() {
     return (
-      <View style={styles.card}>
-        <Text>
-          {this.props.nickname}
-        </Text>
-        <Text>
-          {this.props.detail}
-        </Text>
-        <Text>
-          {this.props.about}
-        </Text>
-      </View>
+      <TouchableOpacity onPress={this.props.onPress}>
+        <View style={styles.card}>
+          <Text>
+            {this.props.nickname}
+          </Text>
+          <Text>
+            {this.props.detail}
+          </Text>
+          <Text>
+            {this.props.about}
+          </Text>
+        </View>
+      </TouchableOpacity>
     );
   }
 }
