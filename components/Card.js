@@ -5,8 +5,7 @@ import React, {
 import {
   View,
   Text,
-  StyleSheet,
-  TouchableOpacity
+  StyleSheet
 } from 'react-native';
 
 import Constants from '../common/Constants'
@@ -28,7 +27,6 @@ export default class Card extends React.Component {
 
   render() {
     return (
-      <TouchableOpacity onPress={this.props.onPress}>
         <View style={styles.card}>
           <Text>
             {this.props.nickname}
@@ -40,7 +38,6 @@ export default class Card extends React.Component {
             {this.props.about}
           </Text>
         </View>
-      </TouchableOpacity>
     );
   }
 }

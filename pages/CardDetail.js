@@ -9,22 +9,18 @@ import {
   StyleSheet,
   WebView
 } from 'react-native';
-
+import {connect} from 'react-redux';
 import Constants from '../common/Constants'
 import Header from '../components/Header'
 
 export default class CardDetail extends React.Component {
   render() {
+    console.log(this.props);
     const {card} = this.props;
-    let avatar = card.avatar;
+    // let avatar = card.avatar;
     let url = 'http://goojio.com/quest/detail/'+card.id;
     return (
       <View>
-        <Header
-          leftIcon='ios-arrow-back'
-          leftIconAction={()=>this.props.navigator.pop()}
-          title={card.about}
-        />
         <WebView style={styles.webview} source={{uri: url}} automaticallyAdjustContentInsets={false}></WebView>
       </View>
 
@@ -34,7 +30,11 @@ export default class CardDetail extends React.Component {
 
 CardDetail.propTypes = {};
 
-CardDetail.defaultProps = {};
+CardDetail.defaultProps = {
+  card: {
+    id: 0
+  }
+};
 
 const styles = StyleSheet.create({
 	card: {
@@ -64,3 +64,18 @@ const styles = StyleSheet.create({
     height: Constants.window.height,
   }
 });
+
+function mapStateToProps(state) {
+  return {
+    state
+  }
+}
+
+// const mapDispatchToProps = (dispatch) => ({
+//   actions: bindActionCreators({
+//     fetchList,
+//   }, dispatch),
+//   dispatch,
+// })
+
+export default connect(mapStateToProps)(CardDetail);

@@ -5,8 +5,12 @@ import React, {
 
 import {
   View,
-  Text
+  Text,
+  TouchableOpacity
 } from 'react-native';
+
+import Button from 'react-native-button';
+import {Actions} from 'react-native-router-flux'
 
 export default class Profile extends React.Component {
   render() {
@@ -15,6 +19,8 @@ export default class Profile extends React.Component {
         <Text>
           Profile todo
         </Text>
+        <Button onPress={Actions.login}>登录</Button>
+        <Button onPress={Actions.register}>注册</Button>
       </View>
     );
   }

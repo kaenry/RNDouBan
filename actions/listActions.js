@@ -6,7 +6,7 @@ export let fetchList = (isLoading)=>{
 
     return dispatch => {
         dispatch(fetchingList(isLoading));
-
+        console.log('fetching');
         return Util.get(URL, (response) => {
             dispatch(receiveList(response.contents));
         }, (error) => {

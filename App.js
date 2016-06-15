@@ -1,6 +1,8 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
+import { Router } from 'react-native-router-flux';
+import { connect } from 'react-redux';
 import thunk from 'redux-thunk';
 
 import appReducers from './reducers/appReducers';

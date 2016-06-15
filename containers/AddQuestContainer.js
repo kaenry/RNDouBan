@@ -2,17 +2,10 @@ import React from 'react';
 import {connect} from 'react-redux';
 import AddQuest from '../pages/AddQuest';
 
-class AddQuestContainer extends React.Component {
-    render() {
-        return (
-            <AddQuest {...this.props} />
-        )
-    }
+function mapStateToProps(state) {
+  return {
+    state
+  }
 }
 
-export default connect((state) => {
-    const {AddQuest} = state;
-    return {
-        AddQuest
-    }
-})(AddQuestContainer);
+export default connect(mapStateToProps)(AddQuest);

@@ -2,17 +2,10 @@ import React from 'react';
 import {connect} from 'react-redux';
 import Profile from '../pages/Profile';
 
-class ProfileContainer extends React.Component {
-    render() {
-        return (
-            <Profile {...this.props} />
-        )
-    }
+function mapStateToProps(state) {
+  return {
+    state
+  }
 }
 
-export default connect((state) => {
-    const {Profile} = state;
-    return {
-        Profile
-    }
-})(ProfileContainer);
+export default connect(mapStateToProps)(Profile);

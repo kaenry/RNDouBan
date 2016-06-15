@@ -11,18 +11,22 @@ import {
   ListView,
   ScrollView,
   InteractionManager,
+  TouchableOpacity,
   Text,
   View
 } from 'react-native';
-
+import {connect} from 'react-redux';
+import {Actions} from 'react-native-router-flux'
 import {fetchList} from '../actions/listActions'
 import Card from '../components/Card'
 import CardDetail from './CardDetail'
-import Loading from '../components/Loading'
+import Constants from '../common/Constants'
+import GiftedSpinner from 'react-native-gifted-spinner'
+import { bindActionCreators } from 'redux'
 
 let isLoading = true;
 
-export default class Main extends React.Component{
+class List extends React.Component{
 
   constructor(props) {
     super(props);
@@ -35,10 +39,8 @@ export default class Main extends React.Component{
   }
 
   componentDidMount() {
-    InteractionManager.runAfterInteractions(() => {
-      const {dispatch} = this.props;
-      dispatch(fetchList(isLoading));
-    })
+    const {dispatch} = this.props
+    dispatch(fetchList(isLoading));
   }
 
   render() {
@@ -50,7 +52,9 @@ export default class Main extends React.Component{
       {
         ListReducer.isLoading
         ?
-        <Loading />
+          <View style={styles.loading}>
+            <GiftedSpinner />
+          </View>
         :
         <ListView
           dataSource={this.state.dataSource.cloneWithRows(list)}
@@ -67,20 +71,15 @@ export default class Main extends React.Component{
 
   _renderRow(data){
     return (
-        <Card onPress={this._pressRow.bind(this, data)} {...data}></Card>
+      <TouchableOpacity onPress={this._pressRow.bind(this, data)}>
+        <Card {...data}></Card>
+      </TouchableOpacity>
     )
   }
 
   _pressRow(data){
-    InteractionManager.runAfterInteractions(() => {
-        this.props.navigator.push({
-          name: 'CardDetail',
-          component: CardDetail,
-          passProps: {
-            card: data
-          }
-        })
-    });
+    console.log('press', data);
+    Actions.detail({card: data});
   }
 };
 
@@ -89,9 +88,12 @@ const styles = StyleSheet.create({
 		flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    height: Constants.window.height
 	},
 
 	listView: {
     padding: 5
 	}
 });
+
+export default List
