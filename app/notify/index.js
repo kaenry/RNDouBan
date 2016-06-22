@@ -7,18 +7,18 @@ import {
   Text
 } from 'react-native';
 
-export default class AddQuest extends React.Component {
+export default class Notify extends React.Component {
   render() {
     return (
       <View>
         <Text>
-          say something...
+          Notify
         </Text>
       </View>
     );
   }
 }
 
-AddQuest.propTypes = {};
+Notify.propTypes = {};
 
-AddQuest.defaultProps = {};
+Notify.defaultProps = {};

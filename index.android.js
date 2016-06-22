@@ -1,10 +1,10 @@
 'use strict';
 
-import React from 'react';
+import React, {Component, PropTypes} from 'react';
 import {
   AppRegistry,
 } from 'react-native';
 
-import app from './app';
+import App from './app';
 
-AppRegistry.registerComponent('react_native_learning', () => app);
+AppRegistry.registerComponent('react_native_learning', () => App);
