@@ -1,9 +1,21 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk'; // action async suppot
+import createLogger from 'redux-logger'
+import devTools from 'remote-redux-devtools'
+
+const logger = createLogger({
+	level: 'log',
+	duration: true,
+	diff: true,
+});
 
 import appReducers from './reducer';
 
-const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
+const createStoreWithMiddleware = compose(
+	applyMiddleware(thunk, logger),
+	devTools(),
+)(createStore);
+
 const store = createStoreWithMiddleware(appReducers);
 
 export default store;

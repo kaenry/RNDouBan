@@ -4,19 +4,61 @@ import React, {
 
 import {
   View,
+  ScrollView,
   Text,
+  Image,
+  ListView,
   StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
 
-export default class Home extends React.Component {
+import {connect} from 'react-redux'
+
+import {fetchMovies} from './action'
+import Loading from '../components/loading'
+
+class Home extends React.Component {
+  constructor(props) {
+    super(props);
+
+    let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+  
+    this.state = {
+      dataSource: ds
+    };
+  }
+  componentDidMount() {
+    console.log('didMount')
+    const {dispatch} = this.props;
+    dispatch(fetchMovies())
+  }
   render() {
+    console.log('render:',this.props)
+    const {isFetching, movies} = this.props;
+
+    if (isFetching) {
+      return <Loading />
+    }
+
     return (
-      <View style={styles.outerContainer}>
-        <Text>
-          Home
-        </Text>
-      </View>
+      <ScrollView>
+        <Text>{movies.title}<Text>
+        <ListView dataSource={this.state.dataSource.cloneWithRows(movies.subjects)} renderRow={this._renderRow.bind(this)}
+          enableEmptySections={true}
+          bounces={false}
+          showsVerticalScrollIndicator={false}/>        
+      </ScrollView>
     );
+  }
+  _renderRow(row) {
+    return (
+      <TouchableOpacity>
+          <View style={styles.movieItem}>
+            <Image source={{uri: row.images.small}} style={styles.avatarImage}/>
+            <Text>{row.title}</Text>
+          </View>
+      </TouchableOpacity>
+    )
   }
 }
 
@@ -30,7 +72,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
 	},
-  container: {
-    flex: 1
+  movieItem: {
+    padding: 12
+  },
+  avatarImage: {
+    width: 35,
+    height: 35,
+    borderRadius: 5
   }
 })
+
+function mapStateToProps(state) {
+  return {
+    ...state.moviesReducer
+  }
+}
+
+export default connect(mapStateToProps)(Home)

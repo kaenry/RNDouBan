@@ -52,7 +52,7 @@ class Nav extends React.Component {
 
   render() {
 		return (
-      <Router createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
+      <Router getSceneStyle={getSceneStyle}>
         <Scene key="root">
           <Scene key="login" component={Login} title="登录"></Scene>
           <Scene key="tabs" tabs={true} initial={true}>
