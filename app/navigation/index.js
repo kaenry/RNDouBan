@@ -21,6 +21,7 @@ import Notify from '../notify'
 import User from '../user';
 
 import Login from '../authorize/login'
+import Detail from '../home/detail'
 
 const reducerCreate = params=>{
     const defaultReducer = Reducer(params);
@@ -35,11 +36,11 @@ const reducerCreate = params=>{
 const getSceneStyle = function (/* NavigationSceneRendererProps */ props, computedProps) {
   const style = {
     flex: 1,
-    // backgroundColor: '#fff',
-    // shadowColor: null,
-    // shadowOffset: null,
-    // shadowOpacity: null,
-    // shadowRadius: null,
+    backgroundColor: '#fff',
+    shadowColor: null,
+    shadowOffset: null,
+    shadowOpacity: null,
+    shadowRadius: null,
   };
   if (computedProps.isActive) {
     style.marginTop = computedProps.hideNavBar ? 0 : 64;
@@ -55,8 +56,10 @@ class Nav extends React.Component {
       <Router getSceneStyle={getSceneStyle}>
         <Scene key="root">
           <Scene key="login" component={Login} title="登录"></Scene>
-          <Scene key="tabs" tabs={true} initial={true}>
-              <Scene key="home" component={Home} title="首页" icon={TabIcon} iconName='md-home' initial={true}></Scene>
+          <Scene key='detail' component={Detail} title='电影详情' hideTabBar></Scene>
+          <Scene key="tabs" tabs={true} initial={true} tabBarStyle={styles.tabBarStyle}>
+              <Scene key="home" component={Home} title="首页" icon={TabIcon} iconName='md-home' initial={true}>
+              </Scene>
               <Scene key="notify" component={Notify} title="消息" icon={TabIcon} iconName='md-notifications'></Scene>
               <Scene key="user" component={User} title="我的" icon={TabIcon} iconName='md-person'></Scene>
           </Scene>
@@ -72,6 +75,9 @@ const styles = StyleSheet.create({
 	},
   container: {
     flex: 1
+  },
+  tabBarStyle:{
+    backgroundColor: '#eee'
   }
 })
 

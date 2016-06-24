@@ -13,9 +13,11 @@ import {
 } from 'react-native';
 
 import {connect} from 'react-redux'
+import {Actions} from 'react-native-router-flux'
 
 import {fetchMovies} from './action'
 import Loading from '../components/loading'
+import Util from '../common/util'
 
 class Home extends React.Component {
   constructor(props) {
@@ -28,7 +30,6 @@ class Home extends React.Component {
     };
   }
   componentDidMount() {
-    console.log('didMount')
     const {dispatch} = this.props;
     dispatch(fetchMovies())
   }
@@ -41,8 +42,11 @@ class Home extends React.Component {
     }
 
     return (
+      
       <ScrollView>
-        <Text>{movies.title}<Text>
+        <View style={styles.listViewTitle}>
+          <Text>{movies.title}</Text>
+        </View>
         <ListView dataSource={this.state.dataSource.cloneWithRows(movies.subjects)} renderRow={this._renderRow.bind(this)}
           enableEmptySections={true}
           bounces={false}
@@ -51,11 +55,20 @@ class Home extends React.Component {
     );
   }
   _renderRow(row) {
+    const directors = row.directors;
     return (
-      <TouchableOpacity>
-          <View style={styles.movieItem}>
-            <Image source={{uri: row.images.small}} style={styles.avatarImage}/>
-            <Text>{row.title}</Text>
+      <TouchableOpacity style={styles.movieItem} onPress={() => Actions.detail({url: row.alt})}>
+          <View style={styles.movieAvatar}>
+            <Image source={{uri: row.images.large}} style={styles.avatarImage}/>
+          </View>
+          <View style={styles.movieInfo}>
+            <Text style={styles.movieTitle}>{row.original_title}</Text>
+            <Text>{row.genres.join(',')}</Text>
+            <Text>{row.pubdates}</Text>
+            <Text>导演：</Text>
+            {directors.map((v, key) => {return (<Text key={key}>{v.name}</Text>)})}
+            <Text style={{marginTop: 12}}>主演：</Text>
+            <Text>{row.casts.map((v, key) => {return v.name}).join('/')}</Text>
           </View>
       </TouchableOpacity>
     )
@@ -72,13 +85,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
 	},
+  listViewTitle: {
+    flex: 1,
+    alignItems: 'center',
+  },
   movieItem: {
-    padding: 12
+    padding: 12,
+    flex: 2,
+    flexDirection: 'row',
   },
   avatarImage: {
-    width: 35,
-    height: 35,
-    borderRadius: 5
+    width: Util.window.width/2 - 15,
+    height: Util.window.height/3,
+  },
+  movieInfo: {
+    paddingLeft: 12,
+  },
+  movieTitle: {
+    fontSize: 18,
+    color: '#8CD790',
+    width: Util.window.width/2 -12,
+    marginBottom: 15,
   }
 })
 

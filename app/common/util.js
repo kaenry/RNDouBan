@@ -1,5 +1,9 @@
 'use strict'
 
+import {Dimensions} from 'react-native'
+
+const {height, width} = Dimensions.get('window');
+
 export default {
     get(url,data={}){
         let params = []
@@ -24,5 +28,9 @@ export default {
                 throw new Error(`post failed,err stack:${ret.error?ret.error():""}`)
             }
         })
+    },
+    window: {
+        width,
+        height,
     }
 }
