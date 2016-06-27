@@ -9,7 +9,7 @@ import {
 
 export function fetchMovies(start=0, count=10) {
 	return dispatch => {
-		// dispatch(fetchMovies())
+		dispatch(fetchingMovies())
 		Util.get(Api.comming, {start: start, count: count}).then((ret) => {
 			dispatch(receiveMovies(ret))
 		})

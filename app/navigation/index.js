@@ -39,7 +39,7 @@ const reducerCreate = params=>{
 const getSceneStyle = function (/* NavigationSceneRendererProps */ props, computedProps) {
   const style = {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F7F7F7',
     shadowColor: null,
     shadowOffset: null,
     shadowOpacity: null,

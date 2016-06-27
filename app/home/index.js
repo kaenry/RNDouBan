@@ -41,7 +41,7 @@ class Home extends React.Component {
   render() {
     const {isFetching, movies} = this.props;
 
-    if (isFetching) {
+    if (isFetching && !movies.subjects) {
       return <Loading />
     }
 
