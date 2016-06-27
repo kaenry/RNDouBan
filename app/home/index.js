@@ -10,6 +10,7 @@ import {
   ListView,
   StyleSheet,
   TouchableOpacity,
+  RefreshControl,
 } from 'react-native';
 
 import {connect} from 'react-redux'
@@ -17,16 +18,20 @@ import {Actions} from 'react-native-router-flux'
 
 import {fetchMovies} from './action'
 import Loading from '../components/loading'
+import LoadMore from '../components/loadMore'
 import Util from '../common/util'
 
 class Home extends React.Component {
   constructor(props) {
     super(props);
 
-    let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    let ds = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2,
+    });
   
     this.state = {
-      dataSource: ds
+      dataSource: ds,
+      data: [],
     };
   }
   componentDidMount() {
@@ -34,25 +39,52 @@ class Home extends React.Component {
     dispatch(fetchMovies())
   }
   render() {
-    console.log('render:',this.props)
     const {isFetching, movies} = this.props;
 
     if (isFetching) {
       return <Loading />
     }
 
-    return (
-      
-      <ScrollView>
-        <View style={styles.listViewTitle}>
-          <Text>{movies.title}</Text>
-        </View>
-        <ListView dataSource={this.state.dataSource.cloneWithRows(movies.subjects)} renderRow={this._renderRow.bind(this)}
+    this.state.data = this.state.data.concat(movies.subjects)
+
+    return (        
+        <ListView dataSource={this.state.dataSource.cloneWithRows(this.state.data)} renderRow={this._renderRow.bind(this)}
           enableEmptySections={true}
-          bounces={false}
-          showsVerticalScrollIndicator={false}/>        
-      </ScrollView>
+          onEndReached={this._handleLoadMore.bind(this)} 
+          onEndReachedThreshold={10}
+          initialListSize={2}
+          refreshControl={
+            <RefreshControl
+              refreshing={isFetching}
+              onRefresh={this._onRefresh.bind(this)}
+              color="#8CD790"
+            />
+          }
+          renderFooter={() => this.props.hasMore ? <LoadMore active={this.props.isFetching}/> : null }
+          renderHeader={() => {
+            return (
+              <View style={styles.listViewTitle}>
+                  <Text>{movies.title}</Text>
+              </View>
+            )
+          }}
+        />        
     );
+  }
+  _onRefresh() {
+    // 刷新
+    const {dispatch} = this.props;
+    this.state.data = [];
+    dispatch(fetchMovies())
+  }
+  _handleLoadMore() {
+    // 加载更多
+    if (this.props.hasMore) {
+      const {dispatch, movies} = this.props;
+      let start = movies.start + movies.count;
+      dispatch(fetchMovies(start))
+    }
+    
   }
   _renderRow(row) {
     const directors = row.directors;

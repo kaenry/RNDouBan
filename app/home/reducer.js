@@ -7,7 +7,8 @@ import {
 export function moviesReducer (
 	state={
 		isFetching: true,
-		movies: {},
+		hasMore: true,
+		movies: {}
 	}, action
 ) {
 	switch (action.type) {
@@ -17,9 +18,11 @@ export function moviesReducer (
 				isFetching: true,
 			})
 		case RECEIVE_MOVIES:
+			const {movies} = action;
 			return Object.assign({}, state, {
 				movies: action.movies,
-				isFetching: action.isFetching
+				isFetching: action.isFetching,
+				hasMore: (movies.start + movies.count) < movies.total
 			})
 		default: 
 			return state

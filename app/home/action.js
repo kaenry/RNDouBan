@@ -7,10 +7,10 @@ import {
 	REQUEST_MOVIES, RECEIVE_MOVIES
 } from './constant';
 
-export function fetchMovies() {
+export function fetchMovies(start=0, count=10) {
 	return dispatch => {
 		// dispatch(fetchMovies())
-		fetch(Api.comming).then(ret => ret.json()).then((ret) => {
+		Util.get(Api.comming, {start: start, count: count}).then((ret) => {
 			dispatch(receiveMovies(ret))
 		})
 	}
@@ -24,7 +24,6 @@ function fetchingMovies() {
 }
 
 function receiveMovies(ret) {
-	console.log('receive:',ret)
 	return {
 		type: RECEIVE_MOVIES,
 		isFetching: false,

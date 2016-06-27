@@ -12,6 +12,7 @@ import {
   Navigator,
   BackAndroid,
   ToastAndroid,
+  Platform,
 } from 'react-native';
 
 import { connect } from 'react-redux'
@@ -54,12 +55,18 @@ const getSceneStyle = function (/* NavigationSceneRendererProps */ props, comput
 class Nav extends React.Component {
 
   componentWillMount() {
-    BackAndroid.addEventListener('hardwareBackPress', () => Actions.pop());
+    if (Platform.OS === 'android') {
+      BackAndroid.addEventListener('hardwareBackPress', this.onBackAndroid);
+    }
   }
 
   componentWillUnmount() {
-    BackAndroid.removeEventListener('hardwareBackPress');
+    if (Platform.OS === 'android') {
+      BackAndroid.removeEventListener('hardwareBackPress', this.onBackAndroid);
+    }
   }
+
+  onBackAndroid = () => { return Actions.pop()}
 
   render() {
 		return (
