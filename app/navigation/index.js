@@ -9,11 +9,13 @@ import {
   View,
   Text,
   StyleSheet,
-  Navigator
+  Navigator,
+  BackAndroid,
+  ToastAndroid,
 } from 'react-native';
 
 import { connect } from 'react-redux'
-import {Scene, Reducer, Router, TabBar} from 'react-native-router-flux'
+import {Scene, Reducer, Router, TabBar, Actions} from 'react-native-router-flux'
 import TabIcon from '../components/tabIcon'
 
 import Home from '../home'
@@ -51,6 +53,14 @@ const getSceneStyle = function (/* NavigationSceneRendererProps */ props, comput
 
 class Nav extends React.Component {
 
+  componentWillMount() {
+    BackAndroid.addEventListener('hardwareBackPress', () => Actions.pop());
+  }
+
+  componentWillUnmount() {
+    BackAndroid.removeEventListener('hardwareBackPress');
+  }
+
   render() {
 		return (
       <Router getSceneStyle={getSceneStyle}>
@@ -81,4 +91,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Nav
+export default connect(({route}) => ({route}))(Nav)

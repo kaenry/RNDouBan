@@ -8,6 +8,8 @@ import {
   WebView,
 } from 'react-native';
 
+import { connect } from 'react-redux'
+
 import Loading from '../components/loading'
 
 class Detail extends Component {
@@ -28,4 +30,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default Detail;
+export default connect(({route}) => ({route}))(Detail);
