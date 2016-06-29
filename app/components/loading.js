@@ -13,7 +13,7 @@ class Loading extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Spinner type='Bounce' color='#30A9DE'/>
+        <Spinner type='Wave' color='#30A9DE'/>
       </View>
     );
   }

@@ -1,6 +1,6 @@
 'use strict';
 
-import React,{
+import React, {
   Component,
   PropTypes
 } from 'react';
@@ -15,8 +15,16 @@ import {
   Platform,
 } from 'react-native';
 
-import { connect } from 'react-redux'
-import {Scene, Reducer, Router, TabBar, Actions} from 'react-native-router-flux'
+import {
+  connect
+} from 'react-redux'
+import {
+  Scene,
+  Reducer,
+  Router,
+  TabBar,
+  Actions
+} from 'react-native-router-flux'
 import TabIcon from '../components/tabIcon'
 
 import Home from '../home'
@@ -26,17 +34,17 @@ import User from '../user';
 import Login from '../authorize/login'
 import Detail from '../home/detail'
 
-const reducerCreate = params=>{
-    const defaultReducer = Reducer(params);
-    return (state, action)=>{
-        console.log("ACTION:", action);
-        console.log("STATE:", state);
-        return defaultReducer(state, action);
-    }
+const reducerCreate = params => {
+  const defaultReducer = Reducer(params);
+  return (state, action) => {
+    console.log("ACTION:", action);
+    console.log("STATE:", state);
+    return defaultReducer(state, action);
+  }
 };
 
 // define this based on the styles/dimensions you use
-const getSceneStyle = function (/* NavigationSceneRendererProps */ props, computedProps) {
+const getSceneStyle = function( /* NavigationSceneRendererProps */ props, computedProps) {
   const style = {
     flex: 1,
     backgroundColor: '#F7F7F7',
@@ -66,10 +74,12 @@ class Nav extends React.Component {
     }
   }
 
-  onBackAndroid = () => { return Actions.pop()}
+  onBackAndroid = () => {
+    return Actions.pop()
+  }
 
   render() {
-		return (
+    return (
       <Router getSceneStyle={getSceneStyle}>
         <Scene key="root">
           <Scene key="login" component={Login} title="登录"></Scene>
@@ -82,20 +92,24 @@ class Nav extends React.Component {
           </Scene>
         </Scene>
       </Router>
-		)
-	}
+    )
+  }
 }
 
 const styles = StyleSheet.create({
   outerContainer: {
-		flex: 1
-	},
+    flex: 1
+  },
   container: {
     flex: 1
   },
-  tabBarStyle:{
+  tabBarStyle: {
     backgroundColor: '#eee'
   }
 })
 
-export default connect(({route}) => ({route}))(Nav)
+export default connect(({
+  route
+}) => ({
+  route
+}))(Nav)

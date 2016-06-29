@@ -9,7 +9,7 @@ class LoadMore extends Component{
     render(){
         return (
             <View style={styles.loadMore}>
-               {this.props.active?<Spinner isVisble={true} type="FadingCircle" size={13} color="rgba(0,0,0,0.3)"/>:
+               {this.props.active?<Spinner isVisble={true} type="Wave" size={13} color="rgba(0,0,0,0.3)"/>:
                <Icon name="arrow-upward" size={20} color="#8CD790"/>}
                <Text style={styles.loadMoreText}>{this.props.active?"加载中":"上拉加载更多"}</Text>
             </View>

@@ -32,6 +32,7 @@ class Home extends React.Component {
     this.state = {
       dataSource: ds,
       data: [],
+      refreshing: false,
     };
   }
   componentDidMount() {
@@ -55,12 +56,12 @@ class Home extends React.Component {
           initialListSize={2}
           refreshControl={
             <RefreshControl
-              refreshing={isFetching}
+              refreshing={this.state.refreshing}
               onRefresh={this._onRefresh.bind(this)}
               color="#8CD790"
             />
           }
-          renderFooter={() => this.props.hasMore ? <LoadMore active={this.props.isFetching}/> : null }
+          renderFooter={() => this.props.hasMore ? <LoadMore active={isFetching}/> : null }
           renderHeader={() => {
             return (
               <View style={styles.listViewTitle}>
