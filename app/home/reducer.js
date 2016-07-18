@@ -2,22 +2,28 @@
 
 import {
 	REQUEST_MOVIES,
-	RECEIVE_MOVIES
+	RECEIVE_MOVIES,
+	REQUEST_EVENTS,
+	RECEIVE_EVENTS
 } from './constant'
 
-export function moviesReducer(
+export function homeReducer(
 	state = {
 		isFetching: true,
 		hasMore: true,
-		movies: {}
+		movies: {
+			subjects: []
+		},
+		events: {},
 	}, action
 ) {
 	switch (action.type) {
 		case REQUEST_MOVIES:
 
-			return Object.assign({}, state, {
+			return {
 				isFetching: true,
-			})
+				...state,
+			}
 		case RECEIVE_MOVIES:
 			const {
 				movies
@@ -27,6 +33,18 @@ export function moviesReducer(
 				isFetching: action.isFetching,
 				hasMore: (movies.start + movies.count) < movies.total
 			})
+		case REQUEST_EVENTS: 
+			return {
+				...state,
+				isFetching: true,
+			}
+		case RECEIVE_EVENTS:
+			const {events} = action; 
+			return {
+				events: action.ret,
+				isFetching: false,
+				hasMore: (events.start + events.count) < events.total
+			}
 		default:
 			return state
 	}

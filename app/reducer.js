@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 import route from './route';
-import {moviesReducer} from './home/reducer';
+import {homeReducer} from './home/reducer';
 
 export default appReducers = combineReducers({
     route,
-    moviesReducer,
+    homeReducer,
     // other reducer
 })

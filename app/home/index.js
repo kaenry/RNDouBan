@@ -15,8 +15,9 @@ import {
 
 import {connect} from 'react-redux'
 import {Actions} from 'react-native-router-flux'
+import Swiper from 'react-native-swiper'
 
-import {fetchMovies} from './action'
+import {fetchMovies, fetchEvents} from './action'
 import Loading from '../components/loading'
 import LoadMore from '../components/loadMore'
 import Util from '../common/util'
@@ -38,38 +39,93 @@ class Home extends React.Component {
   componentDidMount() {
     const {dispatch} = this.props;
     dispatch(fetchMovies())
+    dispatch(fetchEvents())
   }
   render() {
-    const {isFetching, movies} = this.props;
+    const {isFetching, movies, events} = this.props;
 
-    if (isFetching && !movies.subjects) {
+    if (isFetching && movies.subjects.length <= 0) {
       return <Loading />
     }
 
     this.state.data = this.state.data.concat(movies.subjects)
 
-    return (        
-        <ListView dataSource={this.state.dataSource.cloneWithRows(this.state.data)} renderRow={this._renderRow.bind(this)}
-          enableEmptySections={true}
-          onEndReached={this._handleLoadMore.bind(this)} 
-          onEndReachedThreshold={10}
-          initialListSize={2}
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.refreshing}
-              onRefresh={this._onRefresh.bind(this)}
-              color="#8CD790"
-            />
-          }
-          renderFooter={() => this.props.hasMore ? <LoadMore active={isFetching}/> : null }
-          renderHeader={() => {
-            return (
-              <View style={styles.listViewTitle}>
-                  <Text>{movies.title}</Text>
-              </View>
-            )
-          }}
-        />        
+    return (
+        <View style={styles.wrapper}>
+          <Swiper loop={false}>
+            <View style={styles.wrapper}>
+              <ListView dataSource={this.state.dataSource.cloneWithRows(this.state.data)} renderRow={this._renderRow.bind(this)}
+                enableEmptySections={true}
+                onEndReached={this._handleLoadMore.bind(this)} 
+                onEndReachedThreshold={10}
+                initialListSize={2}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={this.state.refreshing}
+                    onRefresh={this._onRefresh.bind(this)}
+                    color="#8CD790"
+                  />
+                }
+                renderFooter={() => this.props.hasMore ? <LoadMore active={isFetching}/> : null }
+                renderHeader={() => {
+                  return (
+                    <View style={styles.listViewTitle}>
+                        <Text>{movies.title}</Text>
+                    </View>
+                  )
+                }}
+              /> 
+            </View>
+            <View style={styles.wrapper}>
+              <ListView dataSource={this.state.dataSource.cloneWithRows(this.state.data)} renderRow={this._renderRow.bind(this)}
+                enableEmptySections={true}
+                onEndReached={this._handleLoadMore.bind(this)} 
+                onEndReachedThreshold={10}
+                initialListSize={2}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={this.state.refreshing}
+                    onRefresh={this._onRefresh.bind(this)}
+                    color="#8CD790"
+                  />
+                }
+                renderFooter={() => this.props.hasMore ? <LoadMore active={isFetching}/> : null }
+                renderHeader={() => {
+                  return (
+                    <View style={styles.listViewTitle}>
+                        <Text>{movies.title}</Text>
+                    </View>
+                  )
+                }}
+              /> 
+            </View>
+            <View style={styles.wrapper}>
+              <ListView dataSource={this.state.dataSource.cloneWithRows(this.state.data)} renderRow={this._renderRow.bind(this)}
+                enableEmptySections={true}
+                onEndReached={this._handleLoadMore.bind(this)} 
+                onEndReachedThreshold={10}
+                initialListSize={2}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={this.state.refreshing}
+                    onRefresh={this._onRefresh.bind(this)}
+                    color="#8CD790"
+                  />
+                }
+                renderFooter={() => this.props.hasMore ? <LoadMore active={isFetching}/> : null }
+                renderHeader={() => {
+                  return (
+                    <View style={styles.listViewTitle}>
+                        <Text>{movies.title}</Text>
+                    </View>
+                  )
+                }}
+              /> 
+            </View>
+          </Swiper>
+
+        </View>        
+               
     );
   }
   _onRefresh() {
@@ -113,6 +169,9 @@ Home.propTypes = {};
 Home.defaultProps = {};
 
 const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+  },
   outerContainer: {
 		flex: 1,
     alignItems: 'center',
@@ -144,7 +203,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    ...state.moviesReducer
+    ...state.homeReducer
   }
 }
 

@@ -12,6 +12,7 @@
     "react-native-loading-w": "^1.0.0",
     "react-native-router-flux": "^3.26.24",
     "react-native-spinkit": "^0.1.2",
+    "react-native-swiper": "^1.4.6",
     "react-native-tab-navigator": "^0.3.2",
     "react-native-vector-icons": "^2.0.3",
     "react-redux": "^4.4.5",

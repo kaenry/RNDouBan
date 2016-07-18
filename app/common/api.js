@@ -1,7 +1,8 @@
 'use strict'
 
-const ApiHost = 'http://api.douban.com/v2/movie'
+const ApiHost = 'http://api.douban.com/v2'
 
 export default {
-	comming: `${ApiHost}/coming_soon`
+	comming: `${ApiHost}/movie/coming_soon`, // 即将上映的电影
+	event: `${ApiHost}/event/list?loc=108288&day_type=weekend&type=party`, // 北京周末趴
 }
