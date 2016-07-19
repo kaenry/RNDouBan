@@ -13,11 +13,18 @@ import {
   RefreshControl,
 } from 'react-native';
 
-import {connect} from 'react-redux'
-import {Actions} from 'react-native-router-flux'
+import {
+  connect
+} from 'react-redux'
+import {
+  Actions
+} from 'react-native-router-flux'
 import Swiper from 'react-native-swiper'
 
-import {fetchMovies, fetchEvents} from './action'
+import {
+  fetchMovies,
+  fetchEvents
+} from './action'
 import Loading from '../components/loading'
 import LoadMore from '../components/loadMore'
 import Util from '../common/util'
@@ -29,7 +36,7 @@ class Home extends React.Component {
     let ds = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1 !== r2,
     });
-  
+
     this.state = {
       dataSource: ds,
       data: [],
@@ -37,12 +44,18 @@ class Home extends React.Component {
     };
   }
   componentDidMount() {
-    const {dispatch} = this.props;
+    const {
+      dispatch
+    } = this.props;
     dispatch(fetchMovies())
     dispatch(fetchEvents())
   }
   render() {
-    const {isFetching, movies, events} = this.props;
+    const {
+      isFetching,
+      movies,
+      events
+    } = this.props;
 
     if (isFetching && movies.subjects.length <= 0) {
       return <Loading />
@@ -51,8 +64,16 @@ class Home extends React.Component {
     this.state.data = this.state.data.concat(movies.subjects)
 
     return (
-        <View style={styles.wrapper}>
-          <Swiper loop={false}>
+      <View>
+        <ScrollView style={{height:600}} automaticallyAdjustContentInsets={false}>
+          <View style={styles.wrapper}>
+            <Image source={{uri: 'http://skillimg.goojio.com/1-avatar-1467083304695'}} style={styles.cover}></Image>
+            <View>
+              <Text>豆瓣</Text>
+            </View>
+          </View>
+        
+          <Swiper loop={false} style={styles.wrapper}>
             <View style={styles.wrapper}>
               <ListView dataSource={this.state.dataSource.cloneWithRows(this.state.data)} renderRow={this._renderRow.bind(this)}
                 enableEmptySections={true}
@@ -123,25 +144,30 @@ class Home extends React.Component {
               /> 
             </View>
           </Swiper>
+        </ScrollView>
+        </View>
 
-        </View>        
-               
     );
   }
   _onRefresh() {
     // 刷新
-    const {dispatch} = this.props;
+    const {
+      dispatch
+    } = this.props;
     this.state.data = [];
     dispatch(fetchMovies())
   }
   _handleLoadMore() {
     // 加载更多
     if (this.props.hasMore) {
-      const {dispatch, movies} = this.props;
+      const {
+        dispatch,
+        movies
+      } = this.props;
       let start = movies.start + movies.count;
       dispatch(fetchMovies(start))
     }
-    
+
   }
   _renderRow(row) {
     const directors = row.directors;
@@ -173,10 +199,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   outerContainer: {
-		flex: 1,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-	},
+  },
   listViewTitle: {
     flex: 1,
     alignItems: 'center',
@@ -187,8 +213,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   avatarImage: {
-    width: Util.window.width/2 - 15,
-    height: Util.window.height/3,
+    width: Util.window.width / 2 - 15,
+    height: Util.window.height / 3,
   },
   movieInfo: {
     paddingLeft: 12,
@@ -196,8 +222,16 @@ const styles = StyleSheet.create({
   movieTitle: {
     fontSize: 18,
     color: '#8CD790',
-    width: Util.window.width/2 -12,
+    width: Util.window.width / 2 - 12,
     marginBottom: 15,
+  },
+  cover: {
+    width: Util.window.width,
+    height: 160,
+  },
+  logo: {
+    width: 160,
+    height: 64,
   }
 })
 

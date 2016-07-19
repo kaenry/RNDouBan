@@ -11,7 +11,7 @@ export default {
             params.push(`${param}=${encodeURIComponent(data[param])}`)
         })
         params = params.join("&")
-        if (url.contains('?')) {
+        if (url.indexOf('?') != -1) {
             return fetch(`${url}&${params}`).then(ret=>ret.json())
         }
         return fetch(`${url}?${params}`).then(ret=>ret.json())
