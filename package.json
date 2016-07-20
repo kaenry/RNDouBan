@@ -9,6 +9,7 @@
     "react": "^15.1.0",
     "react-native": "^0.27.2",
     "react-native-button": "^1.6.0",
+    "react-native-image-picker": "^0.21.1",
     "react-native-loading-w": "^1.0.0",
     "react-native-router-flux": "^3.26.24",
     "react-native-spinkit": "^0.1.2",
