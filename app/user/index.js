@@ -7,7 +7,7 @@ import {
     Text,
     TouchableOpacity,
     Image,
-    Stylesheet,
+    StyleSheet,
 } from 'react-native';
 
 export default class User extends React.Component {

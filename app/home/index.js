@@ -1,193 +1,163 @@
 import React, {
-  PropTypes,
+    PropTypes,
 } from 'react';
 
 import {
-  View,
-  ScrollView,
-  Text,
-  Image,
-  ListView,
-  StyleSheet,
-  TouchableOpacity,
-  RefreshControl,
+    View,
+    ScrollView,
+    Text,
+    Image,
+    ListView,
+    StyleSheet,
+    TouchableOpacity,
+    RefreshControl,
+    Platform,
 } from 'react-native';
 
 import {
-  connect
-} from 'react-redux'
+    connect
+} from 'react-redux';
 import {
-  Actions
-} from 'react-native-router-flux'
-import Swiper from 'react-native-swiper'
+    Actions
+} from 'react-native-router-flux';
+import Swiper from 'react-native-swiper';
 
 import {
-  fetchMovies,
-  fetchEvents
-} from './action'
-import Loading from '../components/loading'
-import LoadMore from '../components/loadMore'
-import Util from '../common/util'
+    fetchMovies,
+    fetchEvents
+} from './action';
+import Loading from '../components/loading';
+import LoadMore from '../components/loadMore';
+import Util from '../common/util';
+import MovieCard from '../components/movieCard';
+import NavBar from '../components/navbar';
+import Style from '../common/style';
 
 class Home extends React.Component {
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    let ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2,
-    });
+        let ds = new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 !== r2,
+        });
 
-    this.state = {
-      dataSource: ds,
-      data: [],
-      refreshing: false,
-    };
-  }
-  componentDidMount() {
-    const {
-      dispatch
-    } = this.props;
-    dispatch(fetchMovies())
-    dispatch(fetchEvents())
-  }
-  render() {
-    const {
-      isFetching,
-      movies,
-      events
-    } = this.props;
-
-    if (isFetching && movies.subjects.length <= 0) {
-      return <Loading />
+        this.state = {
+            dataSource: ds,
+            data: [],
+            refreshing: false,
+        };
     }
+    componentDidMount() {
+        const {
+            dispatch,
+            movies,
+        } = this.props;
+        if (movies.subjects.length === 0) {
+            dispatch(fetchMovies());
+        }
+    }
+    render() {
+        const {
+            isFetching,
+            movies,
+        } = this.props;
 
-    this.state.data = this.state.data.concat(movies.subjects)
+        if (!isFetching && movies.subjects.length > 0) {
+            this.state.data = this.state.data.concat(movies.subjects);
+        }
 
-    return (
-      <View>
-        <ScrollView style={{height:600}} automaticallyAdjustContentInsets={false}>
-          <View style={styles.wrapper}>
-            <Image source={{uri: 'http://skillimg.goojio.com/1-avatar-1467083304695'}} style={styles.cover}></Image>
-            <View>
-              <Text>豆瓣</Text>
+        return (
+            <View style={styles.wrapper}>
+                <NavBar title='书影音&活动'></NavBar>
+                <Swiper loop={false} renderPagination={this._renderPagination.bind(this)} style={Style.mt1}
+                >
+                    <View style={styles.children} dotTitle='电影'>
+                        {isFetching && movies.subjects.length === 0 ? <Loading/ > : (
+                      <ListView dataSource={this.state.dataSource.cloneWithRows(this.state.data)} renderRow={this._renderRow.bind(this)}
+                        enableEmptySections={true}
+                        onEndReached={this._handleLoadMore.bind(this)} 
+                        onEndReachedThreshold={20}
+                        initialListSize={10}
+                        refreshControl={
+                          <RefreshControl
+                            refreshing={this.state.refreshing}
+                            onRefresh={this._onRefresh.bind(this)}
+                            colors={['#00B51D']}
+                            titleColor='#00B51D'
+                          />
+                        }
+                        renderFooter={() => this.props.hasMore ? <LoadMore active={isFetching}/> : null }
+                      />
+                      )}
+                    </View>
+                    <View style={styles.children} dotTitle='读书'>
+                      <Text>jshd</Text>
+                    </View>
+                </Swiper>
             </View>
-          </View>
+
+        );
+    }
+    _renderDot(active) {
+        return <View style={active ? styles.activeDot : styles.dot}></View>
+    }
+    _renderPagination(index, total, swiper) {
+        // By default, dots only show when `total` > 2
+        if(total <= 1) return null;
+
+        let dotStyle = {
+            width: Util.window.width/total,
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingTop: 11,
+            paddingBottom: 11,
+        }
+
+        let children = swiper.props.children;
+
+        let dots = children.map((v, k) => {
+            return (
+                <View style={[dotStyle, index === k ? styles.activeDot : styles.dot]} key={k}>
+                    <Text style={index === k ? styles.activeDotTitle : styles.dotTitle}>{v.props.dotTitle}</Text>
+                </View>
+            )
+        })
         
-          <Swiper loop={false} style={styles.wrapper}>
-            <View style={styles.wrapper}>
-              <ListView dataSource={this.state.dataSource.cloneWithRows(this.state.data)} renderRow={this._renderRow.bind(this)}
-                enableEmptySections={true}
-                onEndReached={this._handleLoadMore.bind(this)} 
-                onEndReachedThreshold={10}
-                initialListSize={2}
-                refreshControl={
-                  <RefreshControl
-                    refreshing={this.state.refreshing}
-                    onRefresh={this._onRefresh.bind(this)}
-                    color="#8CD790"
-                  />
-                }
-                renderFooter={() => this.props.hasMore ? <LoadMore active={isFetching}/> : null }
-                renderHeader={() => {
-                  return (
-                    <View style={styles.listViewTitle}>
-                        <Text>{movies.title}</Text>
-                    </View>
-                  )
-                }}
-              /> 
-            </View>
-            <View style={styles.wrapper}>
-              <ListView dataSource={this.state.dataSource.cloneWithRows(this.state.data)} renderRow={this._renderRow.bind(this)}
-                enableEmptySections={true}
-                onEndReached={this._handleLoadMore.bind(this)} 
-                onEndReachedThreshold={10}
-                initialListSize={2}
-                refreshControl={
-                  <RefreshControl
-                    refreshing={this.state.refreshing}
-                    onRefresh={this._onRefresh.bind(this)}
-                    color="#8CD790"
-                  />
-                }
-                renderFooter={() => this.props.hasMore ? <LoadMore active={isFetching}/> : null }
-                renderHeader={() => {
-                  return (
-                    <View style={styles.listViewTitle}>
-                        <Text>{movies.title}</Text>
-                    </View>
-                  )
-                }}
-              /> 
-            </View>
-            <View style={styles.wrapper}>
-              <ListView dataSource={this.state.dataSource.cloneWithRows(this.state.data)} renderRow={this._renderRow.bind(this)}
-                enableEmptySections={true}
-                onEndReached={this._handleLoadMore.bind(this)} 
-                onEndReachedThreshold={10}
-                initialListSize={2}
-                refreshControl={
-                  <RefreshControl
-                    refreshing={this.state.refreshing}
-                    onRefresh={this._onRefresh.bind(this)}
-                    color="#8CD790"
-                  />
-                }
-                renderFooter={() => this.props.hasMore ? <LoadMore active={isFetching}/> : null }
-                renderHeader={() => {
-                  return (
-                    <View style={styles.listViewTitle}>
-                        <Text>{movies.title}</Text>
-                    </View>
-                  )
-                }}
-              /> 
-            </View>
-          </Swiper>
-        </ScrollView>
-        </View>
-
-    );
-  }
-  _onRefresh() {
-    // 刷新
-    const {
-      dispatch
-    } = this.props;
-    this.state.data = [];
-    dispatch(fetchMovies())
-  }
-  _handleLoadMore() {
-    // 加载更多
-    if (this.props.hasMore) {
-      const {
-        dispatch,
-        movies
-      } = this.props;
-      let start = movies.start + movies.count;
-      dispatch(fetchMovies(start))
+        return (
+          <View pointerEvents='none' style={[styles.paginationStyle]}>
+            {dots}
+          </View>
+        )
     }
+    _onRefresh() {
+        this.state.data = [];
+        // 刷新
+        const {
+            dispatch
+        } = this.props;
+        dispatch(fetchMovies())
+    }
+    _handleLoadMore() {
+        // 加载更多
+        if (this.props.hasMore) {
+            const {
+                dispatch,
+                movies
+            } = this.props;
+            let start = movies.start + movies.count;
+            dispatch(fetchMovies(start))
+        }
 
-  }
-  _renderRow(row) {
-    const directors = row.directors;
-    return (
-      <TouchableOpacity style={styles.movieItem} onPress={() => Actions.detail({url: row.alt})}>
-          <View style={styles.movieAvatar}>
-            <Image source={{uri: row.images.large}} style={styles.avatarImage}/>
-          </View>
-          <View style={styles.movieInfo}>
-            <Text style={styles.movieTitle}>{row.original_title}</Text>
-            <Text>{row.genres.join(',')}</Text>
-            <Text>{row.pubdates}</Text>
-            <Text>导演：</Text>
-            {directors.map((v, key) => {return (<Text key={key}>{v.name}</Text>)})}
-            <Text style={{marginTop: 12}}>主演：</Text>
-            <Text>{row.casts.map((v, key) => {return v.name}).join('/')}</Text>
-          </View>
-      </TouchableOpacity>
-    )
-  }
+    }
+    _renderRow(row) {
+
+        return (
+            <TouchableOpacity style={styles.movieItem} onPress={() => Actions.detail({url: row.alt})}>
+                <MovieCard movie={row}></MovieCard>
+            </TouchableOpacity>
+        )
+    }
 }
 
 Home.propTypes = {};
@@ -195,50 +165,53 @@ Home.propTypes = {};
 Home.defaultProps = {};
 
 const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-  },
-  outerContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  listViewTitle: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  movieItem: {
-    padding: 12,
-    flex: 2,
-    flexDirection: 'row',
-  },
-  avatarImage: {
-    width: Util.window.width / 2 - 15,
-    height: Util.window.height / 3,
-  },
-  movieInfo: {
-    paddingLeft: 12,
-  },
-  movieTitle: {
-    fontSize: 18,
-    color: '#8CD790',
-    width: Util.window.width / 2 - 12,
-    marginBottom: 15,
-  },
-  cover: {
-    width: Util.window.width,
-    height: 160,
-  },
-  logo: {
-    width: 160,
-    height: 64,
-  }
+    wrapper: {
+        flex: 1,
+    },
+    movieItem: {
+        marginTop: 10,
+    },
+    paginationStyle: {
+        position: 'absolute',
+        top: 1,
+        height: 44,
+        width: Util.window.width,
+        flexDirection: 'row',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor:'#fff',
+        borderBottomWidth: 0.5,
+        borderBottomColor: '#cdcdcd',
+    },
+    activeDot: {
+        borderBottomWidth: 2,
+        borderBottomColor: '#00B51D',
+    },
+    dot: {
+        borderBottomWidth: 2,
+        borderBottomColor: '#fff',
+    },
+    dotTitle: {
+
+    },
+    activeDotTitle: {
+        color: '#00B51D',
+    },
+    children: {
+        flex: 1,
+        paddingTop: 44,
+    },
+    cellSeparator:{
+        height:0.5,
+        backgroundColor:"#DDD"
+    },
 })
 
 function mapStateToProps(state) {
-  return {
-    ...state.homeReducer
-  }
+    return {
+        ...state.moviesReducer
+    }
 }
 
 export default connect(mapStateToProps)(Home)

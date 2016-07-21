@@ -1,4 +1,4 @@
-package com.react_native_learning;
+package com.rndouban;
 
 import com.facebook.react.ReactActivity;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -17,7 +17,7 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "react_native_learning";
+        return "RNDouBan";
     }
 
     /**

@@ -7,32 +7,38 @@ import {
 	RECEIVE_EVENTS
 } from './constant'
 
-export function homeReducer(
+export function moviesReducer(
 	state = {
-		isFetching: true,
-		hasMore: true,
+		isFetching: false,
+		hasMore: false,
 		movies: {
-			subjects: []
-		},
-		events: {},
+			start: 0,
+			count: 10,
+			subjects: [],
+		}
 	}, action
 ) {
 	switch (action.type) {
 		case REQUEST_MOVIES:
 
 			return {
-				isFetching: true,
 				...state,
+				isFetching: true,
 			}
 		case RECEIVE_MOVIES:
 			const {
 				movies
 			} = action;
-			return Object.assign({}, state, {
-				movies: action.movies,
-				isFetching: action.isFetching,
-				hasMore: (movies.start + movies.count) < movies.total
-			})
+			return {
+				...state,
+				isFetching: false,
+				hasMore: (movies.start + movies.count) < movies.total,
+				movies: {
+					start: movies.start,
+					count: movies.count,
+					subjects: movies.subjects
+				}
+			}
 		case REQUEST_EVENTS: 
 			return {
 				...state,
@@ -41,6 +47,7 @@ export function homeReducer(
 		case RECEIVE_EVENTS:
 			const {events} = action; 
 			return {
+				...state,
 				events: action.ret,
 				isFetching: false,
 				hasMore: (events.start + events.count) < events.total

@@ -7,4 +7,4 @@ import {
 
 import App from './app';
 
-AppRegistry.registerComponent('react_native_learning', () => App);
+AppRegistry.registerComponent('RNDouBan', () => App);

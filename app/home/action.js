@@ -11,23 +11,21 @@ import {
 export function fetchMovies(start=0, count=10) {
 	return dispatch => {
 		dispatch(fetchingMovies())
-		Util.get(Api.comming, {start: start, count: count}).then((ret) => {
+		Util.get(Api.comming, {start, count}).then((ret) => {
 			dispatch(receiveMovies(ret))
-		})
+		}).catch(err => console.log(err))
 	}
 }
 
 function fetchingMovies() {
 	return {
-		type: REQUEST_MOVIES,
-		isFetching: true,
+		type: REQUEST_MOVIES
 	}
 }
 
 function receiveMovies(ret) {
 	return {
 		type: RECEIVE_MOVIES,
-		isFetching: false,
 		movies: ret
 	}
 }
