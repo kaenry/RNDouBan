@@ -87,8 +87,6 @@ class Nav extends React.Component {
           <Scene key="tabs" tabs={true} initial={true} tabBarStyle={styles.tabBarStyle} navigationBarStyle={styles.navbar}>
               <Scene key="home" component={Home} title="书影音&活动" icon={TabIcon} iconName='md-home' initial={true} hideNavBar>
               </Scene>
-              <Scene key="notify" component={Notify} title="提醒" icon={TabIcon} iconName='md-notifications'></Scene>
-              <Scene key="user" component={User} title="我的" icon={TabIcon} iconName='md-person'></Scene>
           </Scene>
         </Scene>
       </Router>
