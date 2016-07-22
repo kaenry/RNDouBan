@@ -30,6 +30,7 @@ import Loading from '../components/loading';
 import LoadMore from '../components/loadMore';
 import Util from '../common/util';
 import MovieCard from '../components/movieCard';
+import EventCard from '../components/eventCard';
 import NavBar from '../components/navbar';
 import Style from '../common/style';
 
@@ -37,13 +38,18 @@ class Home extends React.Component {
     constructor(props) {
         super(props);
 
-        let ds = new ListView.DataSource({
+        let moviesDS = new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 !== r2,
+        });
+
+        let eventsDS = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 !== r2,
         });
 
         this.state = {
-            dataSource: ds,
-            data: [],
+            moviesDS: moviesDS,
+            eventsDS: eventsDS,
+            // data: [],
             refreshing: false,
         };
     }
@@ -54,17 +60,19 @@ class Home extends React.Component {
         } = this.props;
         if (movies.subjects.length === 0) {
             dispatch(fetchMovies());
+            dispatch(fetchEvents());
         }
     }
     render() {
         const {
             isFetching,
             movies,
+            events,
         } = this.props;
 
-        if (!isFetching && movies.subjects.length > 0) {
-            this.state.data = this.state.data.concat(movies.subjects);
-        }
+        // if (!isFetching && movies.subjects.length > 0) {
+        //     this.state.data = this.state.data.concat(movies.subjects);
+        // }
 
         return (
             <View style={styles.wrapper}>
@@ -73,11 +81,11 @@ class Home extends React.Component {
                 >
                     <View style={styles.children} dotTitle='电影'>
                         {isFetching && movies.subjects.length === 0 ? <Loading/ > : (
-                      <ListView dataSource={this.state.dataSource.cloneWithRows(this.state.data)} renderRow={this._renderRow.bind(this)}
+                      <ListView dataSource={this.state.moviesDS.cloneWithRows(movies.subjects)} renderRow={this._renderRow.bind(this)}
                         enableEmptySections={true}
                         onEndReached={this._handleLoadMore.bind(this)} 
-                        onEndReachedThreshold={20}
-                        initialListSize={10}
+                        onEndReachedThreshold={10}
+                        initialListSize={3}
                         refreshControl={
                           <RefreshControl
                             refreshing={this.state.refreshing}
@@ -90,23 +98,36 @@ class Home extends React.Component {
                       />
                       )}
                     </View>
-                    <View style={styles.children} dotTitle='读书'>
-                      <Text>jshd</Text>
+                    <View style={styles.children} dotTitle='活动'>
+                        {isFetching && movies.subjects.length === 0 ? <Loading/ > : (
+                      <ListView dataSource={this.state.eventsDS.cloneWithRows(events.events)} renderRow={this._renderEvent.bind(this)}
+                        enableEmptySections={true}
+                        onEndReached={this._eventLoadMore.bind(this)} 
+                        onEndReachedThreshold={10}
+                        initialListSize={3}
+                        refreshControl={
+                          <RefreshControl
+                            refreshing={this.state.refreshing}
+                            onRefresh={this._onRefreshEvent.bind(this)}
+                            colors={['#00B51D']}
+                            titleColor='#00B51D'
+                          />
+                        }
+                        renderFooter={() => this.props.hasMore ? <LoadMore active={isFetching}/> : null }
+                      />
+                      )}
                     </View>
                 </Swiper>
             </View>
 
         );
     }
-    _renderDot(active) {
-        return <View style={active ? styles.activeDot : styles.dot}></View>
-    }
     _renderPagination(index, total, swiper) {
         // By default, dots only show when `total` > 2
-        if(total <= 1) return null;
+        if (total <= 1) return null;
 
         let dotStyle = {
-            width: Util.window.width/total,
+            width: Util.window.width / total,
             flex: 1,
             alignItems: 'center',
             justifyContent: 'center',
@@ -123,15 +144,14 @@ class Home extends React.Component {
                 </View>
             )
         })
-        
+
         return (
-          <View pointerEvents='none' style={[styles.paginationStyle]}>
+            <View pointerEvents='none' style={[styles.paginationStyle]}>
             {dots}
           </View>
         )
     }
     _onRefresh() {
-        this.state.data = [];
         // 刷新
         const {
             dispatch
@@ -150,11 +170,38 @@ class Home extends React.Component {
         }
 
     }
+    _onRefreshEvent() {
+        // 刷新
+        const {
+            dispatch
+        } = this.props;
+        dispatch(fetchEvents())
+    }
+    _eventLoadMore() {
+        // 加载更多
+        if (this.props.hasMore) {
+            const {
+                dispatch,
+                events
+            } = this.props;
+            let start = events.start + events.count;
+            dispatch(fetchEvents(start))
+        }
+
+    }
     _renderRow(row) {
 
         return (
             <TouchableOpacity style={styles.movieItem} onPress={() => Actions.detail({url: row.alt})}>
                 <MovieCard movie={row}></MovieCard>
+            </TouchableOpacity>
+        )
+    }
+    _renderEvent(row) {
+
+        return (
+            <TouchableOpacity style={styles.movieItem} onPress={() => Actions.detail({url: row.alt})}>
+                <EventCard event={row}></EventCard>
             </TouchableOpacity>
         )
     }
@@ -180,7 +227,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor:'#fff',
+        backgroundColor: '#fff',
         borderBottomWidth: 0.5,
         borderBottomColor: '#cdcdcd',
     },
@@ -202,15 +249,16 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: 44,
     },
-    cellSeparator:{
-        height:0.5,
-        backgroundColor:"#DDD"
+    cellSeparator: {
+        height: 0.5,
+        backgroundColor: "#DDD"
     },
-})
+});
 
 function mapStateToProps(state) {
     return {
-        ...state.moviesReducer
+        ...state.moviesReducer,
+        ...state.eventsReducer,
     }
 }
 

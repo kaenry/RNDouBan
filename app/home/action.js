@@ -4,14 +4,21 @@ import Api from '../common/api'
 import Util from '../common/util'
 
 import {
-	REQUEST_MOVIES, RECEIVE_MOVIES,
-	REQUEST_EVENTS, RECEIVE_EVENTS,
+	REQUEST_MOVIES,
+	RECEIVE_MOVIES,
+	REFRESH_MOVIES,
+
+	REQUEST_EVENTS,
+	RECEIVE_EVENTS,
 } from './constant';
 
-export function fetchMovies(start=0, count=10) {
+export function fetchMovies(start = 0, count = 10) {
 	return dispatch => {
 		dispatch(fetchingMovies())
-		Util.get(Api.comming, {start, count}).then((ret) => {
+		Util.get(Api.comming, {
+			start,
+			count
+		}).then((ret) => {
 			dispatch(receiveMovies(ret))
 		}).catch(err => console.log(err))
 	}
@@ -30,12 +37,21 @@ function receiveMovies(ret) {
 	}
 }
 
-export function fetchEvents(start=0, count=10) {
+function refreshMovies() {
+	return {
+		type: REFRESH_MOVIES,
+	}
+}
+
+export function fetchEvents(start = 0, count = 10) {
 	return dispatch => {
 		dispatch(fetchingEvents())
-		Util.get(Api.events, {start, count}).then((ret) => {
+		Util.get(Api.events, {
+			start,
+			count
+		}).then((ret) => {
 			dispatch(receiveEvents(ret))
-		})
+		}).catch(err => console.log(err))
 	}
 }
 
