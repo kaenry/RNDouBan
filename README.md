@@ -1,4 +1,5 @@
-# douban app by react-native
+# ~~douban app by react-native~~
+# React Native for GitHub
 Learning React Native
 ## run
 `npm install` some packages need `link`: `rnpm link`
