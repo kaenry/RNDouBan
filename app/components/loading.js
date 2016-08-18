@@ -5,15 +5,14 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
+  ActivityIndicator,
 } from 'react-native';
-
-import Spinner from 'react-native-spinkit'
 
 class Loading extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Spinner type='Wave' color='#30A9DE'/>
+        <ActivityIndicator size='large' color='#30A9DE'/>
       </View>
     );
   }

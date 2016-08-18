@@ -102,7 +102,9 @@ const styles = StyleSheet.create({
         flex: 1
     },
     tabBarStyle: {
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+        borderTopWidth: 0.5,
+        borderTopColor: '#ddd',
     },
     navbar: {
         height: 44,

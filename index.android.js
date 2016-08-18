@@ -7,4 +7,4 @@ import {
 
 import App from './app';
 
-AppRegistry.registerComponent('RNDouBan', () => App);
+AppRegistry.registerComponent('RNGitHub', () => App);
