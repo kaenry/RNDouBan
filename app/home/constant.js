@@ -1,6 +1,3 @@
-export const REQUEST_MOVIES = 'request_movies';
-export const RECEIVE_MOVIES = 'receive_movies';
-export const REFRESH_MOVIES = 'refresh_movies';
-
-export const REQUEST_EVENTS = 'request_events';
-export const RECEIVE_EVENTS = 'receive_events';
+export const FETCH_REPOS_REQUEST = 'FETCH_REPOS_REQUEST';
+export const FETCH_REPOS_SUCCESS = 'FETCH_REPOS_SUCCESS';
+export const FETCH_REPOS_FAILURE = 'FETCH_REPOS_FAILURE';

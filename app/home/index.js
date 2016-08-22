@@ -23,14 +23,15 @@ import {
 import Swiper from 'react-native-swiper';
 
 import {
-    fetchMovies,
-    fetchEvents
+    fetchRepos
 } from './action';
+import {
+    fetchUser
+} from '../user/action';
 import Loading from '../components/loading';
 import LoadMore from '../components/loadMore';
 import Util from '../common/util';
-import MovieCard from '../components/movieCard';
-import EventCard from '../components/eventCard';
+import UserCard from '../components/userCard';
 import NavBar from '../components/navbar';
 import Style from '../common/style';
 
@@ -38,83 +39,57 @@ class Home extends React.Component {
     constructor(props) {
         super(props);
 
-        let moviesDS = new ListView.DataSource({
-            rowHasChanged: (r1, r2) => r1 !== r2,
-        });
-
-        let eventsDS = new ListView.DataSource({
+        let ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 !== r2,
         });
 
         this.state = {
-            moviesDS: moviesDS,
-            eventsDS: eventsDS,
-            // data: [],
+            repos: ds,
             refreshing: false,
         };
     }
     componentDidMount() {
         const {
             dispatch,
-            movies,
+            repos,
         } = this.props;
-        if (movies.subjects.length === 0) {
-            dispatch(fetchMovies());
-            dispatch(fetchEvents());
+        if (repos.items.length === 0) {
+            dispatch(fetchRepos());
         }
+        dispatch(fetchUser());
     }
     render() {
         const {
             isFetching,
-            movies,
-            events,
+            isFetchingUser,
+            repos,
+            user,
         } = this.props;
-
-        // if (!isFetching && movies.subjects.length > 0) {
-        //     this.state.data = this.state.data.concat(movies.subjects);
-        // }
 
         return (
             <View style={styles.wrapper}>
-                <NavBar title='书影音&活动'></NavBar>
+                <NavBar title='GitHub'></NavBar>
                 <Swiper loop={false} renderPagination={this._renderPagination.bind(this)} style={Style.mt1}
                 >
-                    <View style={styles.children} dotTitle='电影'>
-                        {isFetching && movies.subjects.length === 0 ? <Loading/ > : (
-                      <ListView dataSource={this.state.moviesDS.cloneWithRows(movies.subjects)} renderRow={this._renderRow.bind(this)}
-                        enableEmptySections={true}
-                        onEndReached={this._handleLoadMore.bind(this)} 
-                        onEndReachedThreshold={10}
-                        initialListSize={3}
-                        refreshControl={
-                          <RefreshControl
-                            refreshing={this.state.refreshing}
-                            onRefresh={this._onRefresh.bind(this)}
-                            colors={['#00B51D']}
-                            titleColor='#00B51D'
-                          />
-                        }
-                        renderFooter={() => this.props.hasMore ? <LoadMore active={isFetching}/> : null }
-                      />
-                      )}
+                    <View style={styles.children} dotTitle='About'>
+                        {isFetchingUser ? <Loading/ > : <UserCard user={user}></UserCard>}
                     </View>
-                    <View style={styles.children} dotTitle='活动'>
-                        {isFetching && movies.subjects.length === 0 ? <Loading/ > : (
-                      <ListView dataSource={this.state.eventsDS.cloneWithRows(events.events)} renderRow={this._renderEvent.bind(this)}
-                        enableEmptySections={true}
-                        onEndReached={this._eventLoadMore.bind(this)} 
-                        onEndReachedThreshold={10}
-                        initialListSize={3}
-                        refreshControl={
-                          <RefreshControl
-                            refreshing={this.state.refreshing}
-                            onRefresh={this._onRefreshEvent.bind(this)}
-                            colors={['#00B51D']}
-                            titleColor='#00B51D'
+                    <View style={styles.children} dotTitle='Repositories'>
+                        {isFetching ? <Loading/ > : (
+                          <ListView dataSource={this.state.repos.cloneWithRows(repos.items)} renderRow={this._renderRepo.bind(this)}
+                            enableEmptySections={true}
+                            onEndReached={this._loadMore.bind(this)} 
+                            onEndReachedThreshold={10}
+                            initialListSize={3}
+                            refreshControl={
+                              <RefreshControl
+                                refreshing={this.state.refreshing}
+                                onRefresh={this._onRefresh.bind(this)}
+                                colors={['#00B51D']}
+                                titleColor='#00B51D'
+                              />
+                            }
                           />
-                        }
-                        renderFooter={() => this.props.hasMore ? <LoadMore active={isFetching}/> : null }
-                      />
                       )}
                     </View>
                 </Swiper>
@@ -156,52 +131,26 @@ class Home extends React.Component {
         const {
             dispatch
         } = this.props;
-        dispatch(fetchMovies())
+        dispatch(fetchRepos())
     }
-    _handleLoadMore() {
+    _loadMore() {
         // 加载更多
         if (this.props.hasMore) {
             const {
-                dispatch,
-                movies
+                dispatch
             } = this.props;
-            let start = movies.start + movies.count;
-            dispatch(fetchMovies(start))
+            dispatch(fetchRepos())
         }
 
     }
-    _onRefreshEvent() {
-        // 刷新
-        const {
-            dispatch
-        } = this.props;
-        dispatch(fetchEvents())
-    }
-    _eventLoadMore() {
-        // 加载更多
-        if (this.props.hasMore) {
-            const {
-                dispatch,
-                events
-            } = this.props;
-            let start = events.start + events.count;
-            dispatch(fetchEvents(start))
-        }
-
-    }
-    _renderRow(row) {
+    _renderRepo(row) {
 
         return (
-            <TouchableOpacity style={styles.movieItem} onPress={() => Actions.detail({url: row.alt})}>
-                <MovieCard movie={row}></MovieCard>
-            </TouchableOpacity>
-        )
-    }
-    _renderEvent(row) {
-
-        return (
-            <TouchableOpacity style={styles.movieItem} onPress={() => Actions.detail({url: row.alt})}>
-                <EventCard event={row}></EventCard>
+            <TouchableOpacity style={styles.item} onPress={() => Actions.detail({url: row.url})}>
+                <View>
+                    <Text>{row.full_name}</Text>
+                    <Text style={styles.desc}>{row.description}</Text>
+                </View>
             </TouchableOpacity>
         )
     }
@@ -215,7 +164,7 @@ const styles = StyleSheet.create({
     wrapper: {
         flex: 1,
     },
-    movieItem: {
+    item: {
         marginTop: 10,
     },
     paginationStyle: {
@@ -239,9 +188,6 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
         borderBottomColor: '#fff',
     },
-    dotTitle: {
-
-    },
     activeDotTitle: {
         color: '#00B51D',
     },
@@ -249,16 +195,19 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: 44,
     },
-    cellSeparator: {
-        height: 0.5,
-        backgroundColor: "#DDD"
+    avatar: {
+        width: 200,
+        height: 200,
     },
+    desc: {
+        color: '#666',
+    }
 });
 
 function mapStateToProps(state) {
     return {
-        ...state.moviesReducer,
-        ...state.eventsReducer,
+        ...state.reposReducer,
+        ...state.userReducer,
     }
 }
 

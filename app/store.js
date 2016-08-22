@@ -1,7 +1,8 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk'; // action async suppot
-import createLogger from 'redux-logger'
-import devTools from 'remote-redux-devtools'
+import createLogger from 'redux-logger';
+import devTools from 'remote-redux-devtools';
+import callAPIMiddleware from './callAPIMiddleware';
 
 const logger = createLogger({
 	level: 'log',
@@ -12,7 +13,7 @@ const logger = createLogger({
 import appReducers from './reducer';
 
 const createStoreWithMiddleware = compose(
-	applyMiddleware(thunk, logger),
+	applyMiddleware(thunk, callAPIMiddleware, logger),
 	devTools(),
 )(createStore);
 

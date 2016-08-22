@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 
-const blue  = '#00B51D';
+const blue  = '#4078c0';
 const red   = '#FF7473';
 const grey  = '#CDCDCD';
 const white = '#fff';

@@ -1,71 +1,25 @@
-'use strict'
+'use strict';
 
-import Api from '../common/api'
-import Util from '../common/util'
+import Api from '../common/api';
+import Util from '../common/util';
 
 import {
-	REQUEST_MOVIES,
-	RECEIVE_MOVIES,
-	REFRESH_MOVIES,
-
-	REQUEST_EVENTS,
-	RECEIVE_EVENTS,
+	FETCH_REPOS_REQUEST,
+	FETCH_REPOS_SUCCESS,
+	FETCH_REPOS_FAILURE,
 } from './constant';
 
-export function fetchMovies(start = 0, count = 10) {
-	return dispatch => {
-		dispatch(fetchingMovies())
-		Util.get(Api.comming, {
-			start,
-			count
-		}).then((ret) => {
-			dispatch(receiveMovies(ret))
-		}).catch(err => console.log(err))
-	}
-}
-
-function fetchingMovies() {
+export function fetchRepos(q = 'react-native') {
 	return {
-		type: REQUEST_MOVIES
-	}
-}
-
-function receiveMovies(ret) {
-	return {
-		type: RECEIVE_MOVIES,
-		movies: ret
-	}
-}
-
-function refreshMovies() {
-	return {
-		type: REFRESH_MOVIES,
-	}
-}
-
-export function fetchEvents(start = 0, count = 10) {
-	return dispatch => {
-		dispatch(fetchingEvents())
-		Util.get(Api.events, {
-			start,
-			count
-		}).then((ret) => {
-			dispatch(receiveEvents(ret))
-		}).catch(err => console.log(err))
-	}
-}
-
-function fetchingEvents() {
-	return {
-		type: REQUEST_EVENTS,
-		isFetching: true,
-	}
-}
-
-function receiveEvents(ret) {
-	return {
-		type: RECEIVE_EVENTS,
-		isFetching: false,
-		events: ret
+		// Types of actions to emit before and after
+		types: [FETCH_REPOS_REQUEST, FETCH_REPOS_SUCCESS, FETCH_REPOS_FAILURE],
+		// Perform the fetching:
+		callAPI: () => Util.get(Api.repositories, {
+			q
+		}),
+		// Arguments to inject in begin/end actions
+		payload: {
+			q
+		}
 	}
 }

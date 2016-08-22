@@ -1,111 +1,38 @@
-'use strict'
+'use strict';
 
 import {
-	REQUEST_MOVIES,
-	RECEIVE_MOVIES,
-	REFRESH_MOVIES,
+	FETCH_REPOS_REQUEST,
+	FETCH_REPOS_SUCCESS,
+	FETCH_REPOS_FAILURE,
+} from './constant';
 
-	REQUEST_EVENTS,
-	RECEIVE_EVENTS
-} from './constant'
-
-export function moviesReducer(
+export function reposReducer(
 	state = {
 		isFetching: false,
 		hasMore: false,
-		movies: {
-			start: 0,
-			count: 10,
-			subjects: [],
+		repos: {
+			items: [],
 		}
 	}, action
 ) {
 	switch (action.type) {
-		case REQUEST_MOVIES:
+		case FETCH_REPOS_REQUEST:
 			return {
 				...state,
 				isFetching: true,
 			}
-		case REFRESH_MOVIES:
+		case FETCH_REPOS_FAILURE:
 
 			return {
 				...state,
-				isFetching: true,
-				movies: {
-					start: 0,
-					count: 10,
-					subjects: [],
-				}
+				isFetching: false,
+				error: action.error,
 			}
-		case RECEIVE_MOVIES:
-			const movies = {...state.movies};
+		case FETCH_REPOS_SUCCESS:
 			return {
 				...state,
 				isFetching: false,
-				hasMore: (action.movies.start + action.movies.count) < action.movies.total,
-				movies: {
-					start: action.movies.start,
-					count: action.movies.count,
-					subjects: action.movies.start === 0 ? action.movies.subjects : [].concat(movies.subjects, action.movies.subjects)
-				}
-			}
-		case REQUEST_EVENTS: 
-			return {
-				...state,
-				isFetching: true,
-			}
-		case RECEIVE_EVENTS:
-			const {events} = action; 
-			return {
-				...state,
-				events: action.ret,
-				isFetching: false,
-				hasMore: (events.start + events.count) < events.total
-			}
-		default:
-			return state
-	}
-}
-
-export function eventsReducer(
-	state = {
-		isFetching: false,
-		hasMore: false,
-		events: {
-			start: 0,
-			count: 10,
-			events: [],
-		}
-	}, action
-) {
-	switch (action.type) {
-		case REQUEST_EVENTS:
-			return {
-				...state,
-				isFetching: true,
-			}
-		case REFRESH_MOVIES:
-
-			return {
-				...state,
-				isFetching: true,
-				movies: {
-					start: 0,
-					count: 10,
-					subjects: [],
-				}
-			}
-		case RECEIVE_EVENTS:
-			const events = {...state.events};
-			return {
-				...state,
-				isFetching: false,
-				hasMore: (action.events.start + action.events.count) < action.events.total,
-				events: {
-					start: action.events.start,
-					count: action.events.count,
-					events: action.events.start === 0 ? action.events.events : [].concat(events.events, action.events.events)
-				}
+				repos: action.response
 			}
 		default:
 			return state
