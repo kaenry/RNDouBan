@@ -10,12 +10,11 @@ import {
 } from './constant';
 
 export function fetchUser(name='kaenry') {
-	let url = name ? (Api.users + '/' + name) : Api.users;
 	return {
 		// Types of actions to emit before and after
 		types: [FETCH_USER_REQUEST, FETCH_USER_SUCCESS, FETCH_USER_FAILURE],
 		// Perform the fetching:
-		callAPI: () => Util.get(url),
+		callAPI: () => Util.get(`${Api.users}/${name}`),
 		// Arguments to inject in begin/end actions
 		payload: {
 			name

@@ -32,6 +32,7 @@ import Loading from '../components/loading';
 import LoadMore from '../components/loadMore';
 import Util from '../common/util';
 import UserCard from '../components/userCard';
+import RepoItem from '../components/repoItem';
 import NavBar from '../components/navbar';
 import Style from '../common/style';
 
@@ -148,8 +149,7 @@ class Home extends React.Component {
         return (
             <TouchableOpacity style={styles.item} onPress={() => Actions.detail({url: row.url})}>
                 <View>
-                    <Text>{row.full_name}</Text>
-                    <Text style={styles.desc}>{row.description}</Text>
+                    <RepoItem repo={row}></RepoItem>
                 </View>
             </TouchableOpacity>
         )
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     item: {
-        marginTop: 10,
+        marginTop: 1,
     },
     paginationStyle: {
         position: 'absolute',
@@ -182,14 +182,14 @@ const styles = StyleSheet.create({
     },
     activeDot: {
         borderBottomWidth: 2,
-        borderBottomColor: '#00B51D',
+        borderBottomColor: '#d26911',
     },
     dot: {
         borderBottomWidth: 2,
         borderBottomColor: '#fff',
     },
     activeDotTitle: {
-        color: '#00B51D',
+        color: '#d26911',
     },
     children: {
         flex: 1,
