@@ -9,8 +9,10 @@ import {
 export function reposReducer(
 	state = {
 		isFetching: false,
-		hasMore: false,
+		q: 'react-native',
 		repos: {
+			page: 1,
+			per_page: 15,
 			items: [],
 		}
 	}, action
@@ -29,10 +31,15 @@ export function reposReducer(
 				error: action.error,
 			}
 		case FETCH_REPOS_SUCCESS:
+			const resp = action.response;
 			return {
 				...state,
 				isFetching: false,
-				repos: action.response
+				repos: {
+					page: action.page,
+					per_page: action.per_page,
+					items: action.page === 1 ? resp.items : [].concat(state.repos.items, resp.items),
+				}
 			}
 		default:
 			return state

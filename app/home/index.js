@@ -76,7 +76,7 @@ class Home extends React.Component {
                         {isFetchingUser ? <Loading/ > : <UserCard user={user}></UserCard>}
                     </View>
                     <View style={styles.children} dotTitle='Repositories'>
-                        {isFetching ? <Loading/ > : (
+                        {(isFetching && repos.items.length === 0) ? <Loading/ > : (
                           <ListView dataSource={this.state.repos.cloneWithRows(repos.items)} renderRow={this._renderRepo.bind(this)}
                             enableEmptySections={true}
                             onEndReached={this._loadMore.bind(this)} 
@@ -136,12 +136,12 @@ class Home extends React.Component {
     }
     _loadMore() {
         // 加载更多
-        if (this.props.hasMore) {
-            const {
-                dispatch
-            } = this.props;
-            dispatch(fetchRepos())
-        }
+        const {
+            dispatch,
+            repos,
+            q,
+        } = this.props;
+        dispatch(fetchRepos(q, repos.page+1));
 
     }
     _renderRepo(row) {
@@ -194,6 +194,7 @@ const styles = StyleSheet.create({
     children: {
         flex: 1,
         paddingTop: 44,
+        marginBottom: 50,
     },
     avatar: {
         width: 200,

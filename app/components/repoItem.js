@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 
 import Style from '../common/style';
+import Util from '../common/util';
 import Icon from 'react-native-vector-icons/Ionicons'
 
 class RepoItem extends Component {
@@ -24,15 +25,13 @@ class RepoItem extends Component {
                     <View style={[styles.octicon]}>
                         <Icon name={repo.fork ? 'md-git-branch' : 'md-bookmarks'} size={16}></Icon>
                     </View>
-                    <View style={[styles.nameView]}>
+                    <View style={styles.nameView}>
                         <Text style={styles.name} numberOfLines={1}>{repo.full_name}</Text>
                     </View>
-                    <View>
-                        <View style={[styles.starView]}>
-                            <Text> {repo.watchers} </Text>
-                            <View style={Style.valignCenter}>
-                                <Icon name='md-star' size={16}> </Icon>
-                            </View>
+                    <View style={[styles.starView]}>
+                        <Text> {repo.watchers} </Text>
+                        <View>
+                            <Icon name='md-star' size={16}> </Icon>
                         </View>
                     </View>
                 </View>
@@ -51,27 +50,31 @@ const styles = StyleSheet.create({
     },
     infoView: {
         flexDirection: 'row',
-        flex: 1,
+        alignItems: 'center',
     },
     octicon: {
         justifyContent: 'center',
+        alignItems: 'center',
     },
     nameView: {
-        paddingLeft: 16,
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        paddingLeft: 10,
+        width: Util.window.width/3*2,
     },
     name: {
         color: '#4078c0',
     },
     starView: {
         flexDirection: 'row',
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-        marginRight: 0,
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        alignSelf: 'flex-end',
         flex: 1,
     },
     descView: {
-        paddingLeft: 30,
-        paddingTop: 10,
+        paddingLeft: 22,
+        paddingTop: 6,
     },
 });
 
