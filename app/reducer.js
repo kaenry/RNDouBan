@@ -1,11 +1,19 @@
-import { combineReducers } from 'redux';
+import {
+    combineReducers
+} from 'redux';
 import route from './route';
-import {reposReducer} from './home/reducer';
-import {userReducer} from './user/reducer';
+import {
+    searchReposReducer,
+    repoReducer
+} from './home/reducer';
+import {
+    userReducer
+} from './user/reducer';
 
 export default appReducers = combineReducers({
     route,
-    reposReducer,
+    searchReposReducer,
+    repoReducer,
     userReducer,
     // other reducer
 })

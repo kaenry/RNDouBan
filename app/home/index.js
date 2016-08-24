@@ -6,6 +6,7 @@ import {
     View,
     ScrollView,
     Text,
+    TextInput,
     Image,
     ListView,
     StyleSheet,
@@ -21,9 +22,13 @@ import {
     Actions
 } from 'react-native-router-flux';
 import Swiper from 'react-native-swiper';
+import Button from 'react-native-button';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import {
-    fetchRepos
+    fetchRepo,
+    searchRepos,
+    changeSearchText,
 } from './action';
 import {
     fetchUser
@@ -33,6 +38,7 @@ import LoadMore from '../components/loadMore';
 import Util from '../common/util';
 import UserCard from '../components/userCard';
 import RepoItem from '../components/repoItem';
+import RepoCard from '../components/repoCard';
 import NavBar from '../components/navbar';
 import Style from '../common/style';
 
@@ -55,16 +61,21 @@ class Home extends React.Component {
             repos,
         } = this.props;
         if (repos.items.length === 0) {
-            dispatch(fetchRepos());
+            dispatch(searchRepos());
         }
         dispatch(fetchUser());
+        dispatch(fetchRepo());
     }
     render() {
         const {
             isFetching,
             isFetchingUser,
+            isFetchingRepo,
             repos,
             user,
+            repo,
+            q,
+            dispatch,
         } = this.props;
 
         return (
@@ -74,12 +85,22 @@ class Home extends React.Component {
                 >
                     <View style={styles.children} dotTitle='About'>
                         {isFetchingUser ? <Loading/ > : <UserCard user={user}></UserCard>}
+                        {isFetchingRepo ? null : this._renderRepo(repo)}
                     </View>
                     <View style={styles.children} dotTitle='Repositories'>
+                        {   
+                            <View style={styles.searchView}>
+                                <View style={styles.searchInputView}>
+                                    <Icon name='md-search' size={24} style={styles.searchIcon}></Icon>
+                                    <TextInput underlineColorAndroid='#fff' returnKeyType='search' onSubmitEditing={this._search.bind(this)} style={styles.searchInput} onChangeText={(text) => dispatch(changeSearchText(text))} value={q}></TextInput>
+                                </View>
+                            </View>
+                        }
                         {(isFetching && repos.items.length === 0) ? <Loading/ > : (
-                          <ListView dataSource={this.state.repos.cloneWithRows(repos.items)} renderRow={this._renderRepo.bind(this)}
+                            
+                            <ListView dataSource={this.state.repos.cloneWithRows(repos.items)} renderRow={this._renderRepo.bind(this)}
                             enableEmptySections={true}
-                            onEndReached={this._loadMore.bind(this)} 
+                            onEndReached={this._loadMore.bind(this)}
                             onEndReachedThreshold={10}
                             initialListSize={3}
                             refreshControl={
@@ -90,8 +111,9 @@ class Home extends React.Component {
                                 titleColor='#00B51D'
                               />
                             }
-                          />
-                      )}
+                            />
+                        )
+                    }
                     </View>
                 </Swiper>
             </View>
@@ -127,30 +149,39 @@ class Home extends React.Component {
           </View>
         )
     }
+    _search() {
+        const {
+            dispatch,
+            q,
+        } = this.props;
+        dispatch(searchRepos(q));
+    }
     _onRefresh() {
         // 刷新
         const {
-            dispatch
+            dispatch,
+            q,
         } = this.props;
-        dispatch(fetchRepos())
+        dispatch(searchRepos(q))
     }
     _loadMore() {
         // 加载更多
         const {
             dispatch,
+            incomplete,
             repos,
             q,
         } = this.props;
-        dispatch(fetchRepos(q, repos.page+1));
+        if (!incomplete) {
+            dispatch(searchRepos(q, repos.page + 1));
+        }
 
     }
     _renderRepo(row) {
 
         return (
-            <TouchableOpacity style={styles.item} onPress={() => Actions.detail({url: row.url})}>
-                <View>
-                    <RepoItem repo={row}></RepoItem>
-                </View>
+            <TouchableOpacity style={styles.item} onPress={() => Actions.detail({url: row.html_url, title: row.full_name})}>
+                <RepoItem repo={row}></RepoItem>
             </TouchableOpacity>
         )
     }
@@ -162,6 +193,31 @@ Home.defaultProps = {};
 
 const styles = StyleSheet.create({
     wrapper: {
+        flex: 1,
+    },
+    searchView: {
+        backgroundColor: '#fff',
+        paddingLeft: 16,
+        paddingRight: 16,
+        paddingTop: 10,
+        paddingBottom: 10,
+        marginBottom: 1,
+        flexDirection: 'row',
+    },
+    searchInputView: {
+        borderColor: '#ddd',
+        borderWidth: 1,
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    searchIcon: {
+        paddingLeft: 6,
+        paddingRight: 4,
+    },  
+    searchInput: {
+        paddingTop: 4,
+        paddingBottom: 5,
         flex: 1,
     },
     item: {
@@ -207,8 +263,9 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
     return {
-        ...state.reposReducer,
+        ...state.searchReposReducer,
         ...state.userReducer,
+        ...state.repoReducer,
     }
 }
 

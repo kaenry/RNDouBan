@@ -19,7 +19,7 @@ class UserCard extends Component {
     render() {
         let user = this.props.user;
         return (
-            <ScrollView>
+            <View>
                 <View style={[Style.p16, styles.card]}>
                     <View style={[Style.valignCenter]}>
                         <Image resizeMode='center' source={{uri: user.avatar_url}} style={styles.avatar}></Image>
@@ -49,7 +49,7 @@ class UserCard extends Component {
                         <Text>Followers</Text>
                     </View>
                 </View>
-            </ScrollView>
+            </View>
         );
     }
 }

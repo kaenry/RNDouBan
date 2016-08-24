@@ -12,7 +12,7 @@ class Loading extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <ActivityIndicator size='large' color='#30A9DE'/>
+        <ActivityIndicator size='large' color='#30A9DE' animating={this.props.active}/>
       </View>
     );
   }

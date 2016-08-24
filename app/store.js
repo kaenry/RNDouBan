@@ -13,7 +13,7 @@ const logger = createLogger({
 import appReducers from './reducer';
 
 const createStoreWithMiddleware = compose(
-	applyMiddleware(logger, thunk, callAPIMiddleware),
+	applyMiddleware(thunk, logger, callAPIMiddleware),
 	devTools(),
 )(createStore);
 

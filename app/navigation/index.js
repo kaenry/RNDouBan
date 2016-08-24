@@ -83,7 +83,7 @@ class Nav extends React.Component {
             <Router getSceneStyle={getSceneStyle}>
         <Scene key="root">
           <Scene key="login" component={Login} title="登录"></Scene>
-          <Scene key='detail' component={Detail} title='电影详情' hideTabBar></Scene>
+          <Scene key='detail' component={Detail} title='' hideTabBar hideNavBar></Scene>
           <Scene key="tabs" tabs={true} initial={true} tabBarStyle={styles.tabBarStyle} navigationBarStyle={styles.navbar}>
               <Scene key="home" component={Home} title="书影音&活动" icon={TabIcon} iconName='md-home' initial={true} hideNavBar>
               </Scene>

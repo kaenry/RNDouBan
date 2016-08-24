@@ -20,7 +20,7 @@ class RepoItem extends Component {
     render() {
         let repo = this.props.repo;
         return (
-            <View style={[Style.p16, styles.item]}>
+            <View style={[this.props.style, Style.p16, styles.item]}>
                 <View style={[styles.infoView]}>
                     <View style={[styles.octicon]}>
                         <Icon name={repo.fork ? 'md-git-branch' : 'md-bookmarks'} size={16}></Icon>

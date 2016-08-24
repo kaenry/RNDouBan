@@ -25,7 +25,7 @@ class NavBar extends Component {
                     {this._renderBack()}
                 </View>
                 <View style={styles.navbarTitle}>
-                    <Text style={styles.title}>{this.props.title}</Text>
+                    <Text numberOfLines={1} style={styles.title}>{this.props.title}</Text>
                 </View>
                 <View style={[Style.valignCenter, styles.rightBtn]}>
                     {this._renderRight()}
@@ -90,8 +90,8 @@ const styles = StyleSheet.create({
         // flex: 3,
         height: 44,
         backgroundColor: '#fff',
-        borderBottomWidth: 0,
-        borderBottomColor: '#fff',
+        borderBottomWidth: 0.5,
+        borderBottomColor: '#ddd',
         flexDirection: 'row',
         justifyContent: 'center',
     },
